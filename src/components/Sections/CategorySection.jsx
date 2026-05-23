@@ -158,24 +158,21 @@ export default function TrendingSection() {
   const products = active === "men" ? menProducts : womenProducts;
 
   return (
-    <section className="w-full py-10 ">
+    <section className="w-full py-10 sm:px-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 px-4">
+      <div className="flex items-center justify-between mb-8 px-3 md:px-30">
         <h2 className="font-heading text-3xl md:text-4xl tracking-wide">
           TRENDING
         </h2>
-        <TextAnimate
-          animation="blurIn"
-          as="h2"
-          className=" hidden md:flex font-heading text-3xl md:text-4xl tracking-wide"
-        >
+        <h2 className="font-heading text-3xl md:text-4xl tracking-wide">
           Fresh drops. Real style. No compromise.
-        </TextAnimate>
+        </h2>
+
         {/* Toggle */}
         <div className="flex items-center border border-border  gap-1">
           <button
             onClick={() => setActive("women")}
-            className={`font-body text-sm font-medium px-5 py-1.5  transition-all duration-300 ${
+            className={`font-body text-base sm:text-xl font-medium px-5 py-1.5  transition-all duration-300 ${
               active === "women"
                 ? "bg-foreground text-background"
                 : "text-muted-foreground hover:text-foreground"
@@ -185,7 +182,7 @@ export default function TrendingSection() {
           </button>
           <button
             onClick={() => setActive("men")}
-            className={`font-body text-sm font-medium px-5 py-1.5  transition-all duration-300 ${
+            className={`font-body text-base sm:text-xl font-medium px-5 py-1.5  transition-all duration-300 ${
               active === "men"
                 ? "bg-foreground text-background"
                 : "text-muted-foreground hover:text-foreground"
@@ -197,7 +194,7 @@ export default function TrendingSection() {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-x-3 gap-y-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-x-2 gap-y-8">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

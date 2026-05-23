@@ -28,7 +28,7 @@ export default function HeroBanner() {
         {/* Right image */}
         <div className="relative flex-1 h-full overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1734944688893-3cb02d71fb3d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="https://img.magnific.com/free-photo/full-shot-punk-woman-posing_23-2149267435.jpg?t=st=1779574998~exp=1779578598~hmac=07c287ffae1a32a320470640f7f631f2aab293fa12ac4ae4ebaad0080bc37a69&w=2000"
             alt="Shop new arrivals"
             fill
             className="object-cover object-center"

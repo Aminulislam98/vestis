@@ -28,9 +28,9 @@ const ProductCard = ({ product }) => {
       </div>
 
       {/* Info */}
-      <div className="pt-3 pb-1">
+      <div className="pt-3 pb-1 px-2 sm:px-0">
         {/* Product name */}
-        <p className="font-body text-sm font-medium text-foreground leading-snug">
+        <p className="font-body text-base font-medium text-foreground leading-snug">
           {product.name}
         </p>
 
@@ -38,15 +38,15 @@ const ProductCard = ({ product }) => {
         <div className="flex items-center gap-2 mt-1">
           {isOnSale ? (
             <>
-              <span className="font-price text-sm font-bold text-red-500">
+              <span className="font-price text-base font-bold text-red-500">
                 £{product.price.toFixed(2)}
               </span>
-              <span className="font-price text-sm text-muted-foreground line-through">
+              <span className="font-price text-base text-muted-foreground line-through">
                 £{product.originalPrice.toFixed(2)}
               </span>
             </>
           ) : (
-            <span className="font-price text-sm font-bold text-foreground">
+            <span className="font-price text-base font-bold text-foreground">
               £{product.price.toFixed(2)}
             </span>
           )}
