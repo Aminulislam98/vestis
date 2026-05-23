@@ -1,4 +1,5 @@
 import BrandMarquee from "@/components/Sections/BrandMarquee";
+import TrendingSection from "@/components/Sections/CategorySection";
 import HeroBanner from "@/components/Sections/HeroBanner";
 
 export default function Home() {
@@ -6,6 +7,7 @@ export default function Home() {
     <>
       <HeroBanner />
       <BrandMarquee />
+      <TrendingSection />
     </>
   );
 }
