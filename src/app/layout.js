@@ -33,7 +33,7 @@ const interTight = Inter_Tight({
 });
 
 export const metadata = {
-  title: "VESTIS — Premium Fashion Store",
+  title: "VESTIS | Fashion Store",
   description:
     "Shop the latest mens tops, womens tops, bottoms and shoes at VESTIS. Premium fashion for everyone.",
   keywords: [
