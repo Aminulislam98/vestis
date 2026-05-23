@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
@@ -11,6 +10,7 @@
   --font-body: var(--font-body);
   --font-price: var(--font-price);
 }
+
 @layer base {
   body {
     font-family: var(--font-body);
@@ -25,7 +25,7 @@
 }
 
 @theme inline {
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-heading);
   --font-sans: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
