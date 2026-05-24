@@ -158,21 +158,30 @@ export default function TrendingSection() {
   const products = active === "men" ? menProducts : womenProducts;
 
   return (
-    <section className="w-full py-10 sm:px-4">
+    <section className="w-full py-10 sm:px-6 md:px-20 bg-background">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8 px-3 md:px-30">
-        <h2 className="font-heading text-3xl md:text-4xl tracking-wide">
-          TRENDING
-        </h2>
-        <h2 className="font-heading text-3xl md:text-4xl tracking-wide hidden md:flex">
-          Fresh drops. Real style. No compromise.
+      <div className="flex flex-col items-center justify-center mb-8 px-3 md:px-30 gap-4">
+        {/* Title — same style as ExploreSection */}
+        <h2
+          className="font-logo text-foreground leading-tight font-semibold tracking-normal text-center"
+          style={{ fontSize: "clamp(2rem, 3vw, 2.8rem)" }}
+        >
+          Trending Right Now
         </h2>
 
+        {/* Subtext */}
+        <p
+          className="font-body text-muted-foreground text-center hidden md:block"
+          style={{ fontSize: "clamp(0.875rem, 1.2vw, 1rem)" }}
+        >
+          Fresh drops. Real style. No compromise.
+        </p>
+
         {/* Toggle */}
-        <div className="flex items-center border border-border  gap-1">
+        <div className="flex items-center border border-border gap-1">
           <button
             onClick={() => setActive("women")}
-            className={`font-body text-base sm:text-xl font-medium px-5 py-1.5  transition-all duration-300 ${
+            className={`font-body text-base sm:text-xl font-medium px-5 py-1.5 transition-all duration-300 ${
               active === "women"
                 ? "bg-foreground text-background"
                 : "text-muted-foreground hover:text-foreground"
@@ -182,7 +191,7 @@ export default function TrendingSection() {
           </button>
           <button
             onClick={() => setActive("men")}
-            className={`font-body text-base sm:text-xl font-medium px-5 py-1.5  transition-all duration-300 ${
+            className={`font-body text-base sm:text-xl font-medium px-5 py-1.5 transition-all duration-300 ${
               active === "men"
                 ? "bg-foreground text-background"
                 : "text-muted-foreground hover:text-foreground"
