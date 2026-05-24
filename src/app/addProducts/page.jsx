@@ -87,7 +87,7 @@ export default function CreateProductForm() {
           .filter(Boolean)
       : [];
 
-    // চূড়ান্ত অবজেক্ট যা MongoDB-তে সেভ হবে
+    // final object to send mongdb
     const productPayload = {
       name: name,
       slug: finalUniqueSlug, // এখানে আমরা আমাদের ইউনিক স্লাগটি পাঠিয়ে দিচ্ছি
@@ -108,9 +108,15 @@ export default function CreateProductForm() {
       outfitCode: formData.get("outfitCode")?.toString() || null,
     };
 
-    // টেস্ট করার জন্য এলার্ট এবং কনসোল লগ
-    alert(`ডাটাবেজের জন্য তৈরি হওয়া ইউনিক স্লাগ:\n${productPayload.slug}`);
-    console.log("Ready for MongoDB Submission:", productPayload);
+    const res = await fetch("http://localhost:4000/product", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(productPayload),
+    });
+    const data = await res.json();
+    console.log("data has been sent to mongodb atlas:", data);
   };
 
   return (
