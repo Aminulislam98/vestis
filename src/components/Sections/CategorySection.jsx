@@ -164,7 +164,7 @@ export default function TrendingSection() {
         <h2 className="font-heading text-3xl md:text-4xl tracking-wide">
           TRENDING
         </h2>
-        <h2 className="font-heading text-3xl md:text-4xl tracking-wide">
+        <h2 className="font-heading text-3xl md:text-4xl tracking-wide hidden md:flex">
           Fresh drops. Real style. No compromise.
         </h2>
 
