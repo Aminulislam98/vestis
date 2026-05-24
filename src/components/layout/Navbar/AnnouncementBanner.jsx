@@ -18,7 +18,13 @@ export default function AnnouncementBanner() {
   // Rotate announcement every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % announcements.length);
+      setCurrent((prev) => {
+        if (prev + 1 >= announcements.length) {
+          return 0;
+        } else {
+          return prev + 1;
+        }
+      });
     }, 3000);
     return () => clearInterval(interval);
   }, []);
