@@ -32,7 +32,7 @@ export default function AnnouncementBanner() {
   if (!visible) return null;
 
   return (
-    <div className="w-full z-40 flex justify-between items-center px-4 py-2.5 border-b border-border bg-foreground dark:bg-foreground">
+    <div className="w-full z-40 flex justify-between items-center px-4 py-2.5 border-b bg-foreground dark:bg-foreground">
       {/* Left spacer */}
       <div className="w-6" />
 
@@ -55,7 +55,7 @@ export default function AnnouncementBanner() {
         className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-sm text-background/70 hover:text-background hover:bg-background/10 transition-colors duration-200"
         aria-label="Close banner"
       >
-        <X size={15} />
+        <X size={20} />
       </button>
     </div>
   );

@@ -54,14 +54,14 @@ export default function ProductGallery({ images }) {
           Hidden on mobile and tablet
           Only shows on desktop lg+
           Clicking sets that image as active */}
-      <div className="hidden lg:flex flex-col gap-2 w-16 shrink-0 px-1">
+      <div className="hidden lg:flex flex-col gap-2 w-16 shrink-0 px-1 ">
         {images.map((img, index) => (
           <button
             key={index}
             onClick={() => setActiveIndex(index)}
             aria-label={`View image ${index + 1}`}
             className={`
-              relative w-full aspect-[3/4] overflow-hidden border-2
+              relative w-full aspect-[3/4] overflow-hidden border-2 sm:rounded-xl
               transition-all duration-200
               ${
                 activeIndex === index
@@ -75,7 +75,7 @@ export default function ProductGallery({ images }) {
               alt={`Product view ${index + 1}`}
               fill
               sizes="64px"
-              className="object-cover object-center"
+              className="object-cover object-center sm:rounded-md"
               quality={80}
             />
           </button>
@@ -88,7 +88,7 @@ export default function ProductGallery({ images }) {
           Touch swipe enabled on mobile */}
       <div
         className="relative flex-1 overflow-hidden bg-background"
-        style={{ height: "clamp(450px, 75vh, 400px)" }}
+        style={{ height: "clamp(400px, 75vh, 550px)" }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -98,7 +98,7 @@ export default function ProductGallery({ images }) {
           alt="Product main image"
           width={800}
           height={1000}
-          className="w-full h-full object-contain transition-opacity duration-300"
+          className="w-full h-full object-cover transition-opacity duration-300 sm:rounded-md"
           quality={95}
           priority
         />
@@ -108,18 +108,29 @@ export default function ProductGallery({ images }) {
             Goes to previous image */}
         <button
           onClick={handlePrev}
-          className="hidden lg:flex absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-background/80 dark:bg-background/60 items-center justify-center hover:bg-background transition-colors"
+          className="hidden lg:flex absolute left-3 top-1/2 -translate-y-1/2 
+             w-9 h-9 
+             bg-background/60 
+             backdrop-blur-md 
+             rounded-full 
+             items-center justify-center 
+             hover:bg-background/80 
+             transition-colors"
           aria-label="Previous image"
         >
           <ChevronLeft size={20} strokeWidth={1.75} />
         </button>
 
-        {/* ── RIGHT ARROW
-            Hidden on mobile — desktop only
-            Goes to next image */}
         <button
           onClick={handleNext}
-          className="hidden lg:flex absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-background/80 dark:bg-background/60 items-center justify-center hover:bg-background transition-colors"
+          className="hidden lg:flex absolute right-3 top-1/2 -translate-y-1/2 
+             w-9 h-9 
+             bg-background/60 
+             backdrop-blur-md 
+             rounded-full 
+             items-center justify-center 
+             hover:bg-background/80 
+             transition-colors"
           aria-label="Next image"
         >
           <ChevronRight size={20} strokeWidth={1.75} />

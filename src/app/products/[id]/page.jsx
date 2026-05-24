@@ -52,7 +52,7 @@ export default function ProductPage() {
           {/* ── LEFT — Image Gallery
               Full width on mobile
               45% width on desktop */}
-          <div className="w-full lg:w-[45%] lg:sticky lg:top-16 lg:self-start lg:h-fit pt-3 ">
+          <div className="w-full lg:w-[45%] lg:sticky lg:top-16 lg:self-start lg:h-fit sm:pt-3 ">
             <ProductGallery images={product.images} />
           </div>
 
