@@ -17,7 +17,7 @@ export default function ProductDetailPageClient({ product }) {
         {/* ── MAIN LAYOUT
             Mobile: stacked — image top, details below
             Desktop: side by side — image left, details right */}
-        <div className="flex flex-col lg:flex-row items-start">
+        <div className="flex flex-col md:flex-row items-start">
           {/* ── LEFT — Image Gallery
               Full width on mobile
               45% width on desktop */}
