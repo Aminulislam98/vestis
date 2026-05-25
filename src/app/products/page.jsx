@@ -1,9 +1,9 @@
 import ProductsPageClient from "@/components/ClientSidePage/ProductsPageClient";
 import React from "react";
 
-const getProducts = async (gender = "", category = "") => {
+const getProducts = async (gender = "", category = "", search = "") => {
   const res = await fetch(
-    `http://localhost:4000/products?gender=${gender}&category=${category}`,
+    `http://localhost:4000/products?gender=${gender}&category=${category}&search=${search}`,
   );
   const data = await res.json();
   return data.data;
@@ -13,7 +13,8 @@ const Products = async ({ searchParams }) => {
   const sp = await searchParams;
   const gender = sp.gender;
   const category = sp.category;
-  const products = await getProducts(gender, category);
+  const search = sp.search;
+  const products = await getProducts(gender, category, search);
 
   return (
     <div>
