@@ -71,8 +71,8 @@ export default function ProductGallery({ images }) {
             `}
           >
             <Image
-              src={img}
-              alt={`Product view ${index + 1}`}
+              src={img.url}
+              alt={img.alt}
               fill
               sizes="64px"
               className="object-cover object-center sm:rounded-md"
@@ -87,18 +87,20 @@ export default function ProductGallery({ images }) {
           Takes remaining space on desktop
           Touch swipe enabled on mobile */}
       <div
-        className="relative flex-1 overflow-hidden bg-background"
-        style={{ height: "clamp(400px, 75vh, 550px)" }}
+        className="relative flex-1 overflow-hidden w-full bg-[#f6f6f6] aspect-3/4 "
+        // style={{ height: "clamp(400px, 75vh, 550px)" }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         <Image
-          src={images[activeIndex]}
-          alt="Product main image"
-          width={800}
-          height={1000}
-          className="w-full h-full object-cover transition-opacity duration-300 sm:rounded-md"
+          src={images[activeIndex].url}
+          alt={images[activeIndex].alt}
+          // width={800}
+          // height={1000}
+          fill
+          sizes="(max-width: 1024px) 100vw, 45vw"
+          className="object-cover object-center transition-opacity duration-300 sm:rounded-md"
           quality={95}
           priority
         />
@@ -139,7 +141,7 @@ export default function ProductGallery({ images }) {
         {/* ── BOTTOM INDICATOR
             Mobile: dots — tap to jump to image
             Desktop: number counter "1 / 3" */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:right-3 flex items-center gap-1.5">
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:right-3 flex items-center gap-1.5 rounded">
           {/* ── Dots — mobile only */}
           <div className="flex lg:hidden items-center gap-1.5">
             {images.map((_, index) => (
