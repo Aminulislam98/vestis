@@ -5,8 +5,8 @@ import SearchModal from "./SearchModal";
 import Link from "next/link";
 
 const navLinks = [
-  { label: "Women", href: "/women" },
-  { label: "Men", href: "/men" },
+  { label: "Women", href: "/products?gender=womens" },
+  { label: "Men", href: "/products?gender=mens" },
   { label: "Kids", href: "/kids" },
 ];
 
