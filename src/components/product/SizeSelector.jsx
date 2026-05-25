@@ -18,7 +18,7 @@ export default function SizeSelector({ variants, selectedSize, onSelect }) {
         <p className="font-body text-sm font-semibold text-foreground">
           Select Size
         </p>
-        <button className="font-body text-sm text-muted-foreground underline hover:text-foreground transition-colors">
+        <button className="font-body text-sm font-semibold  underline hover:text-foreground transition-colors hover:cursor-pointer">
           Size Guide
         </button>
       </div>

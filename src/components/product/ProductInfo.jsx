@@ -44,15 +44,18 @@ export default function ProductInfo({ product }) {
         {/* Free delivery */}
         <div className="flex items-start gap-3">
           <Truck
-            size={18}
-            strokeWidth={1.75}
+            size={25}
+            strokeWidth={2}
             className="text-foreground mt-0.5 shrink-0"
           />
           <div>
-            <p className="font-body text-sm font-semibold text-foreground">
+            <p
+              className="font-body font-semibold text-foreground"
+              style={{ fontSize: "clamp(1.1rem, 1vw, 1.3rem)" }}
+            >
               Free UK Delivery
             </p>
-            <p className="font-body text-xs text-muted-foreground mt-0.5">
+            <p className="font-body text-base mt-0.5">
               On orders over £50. Standard delivery 3-5 working days.
             </p>
           </div>
@@ -61,15 +64,18 @@ export default function ProductInfo({ product }) {
         {/* Free returns */}
         <div className="flex items-start gap-3">
           <RotateCcw
-            size={18}
-            strokeWidth={1.75}
+            size={25}
+            strokeWidth={2}
             className="text-foreground mt-0.5 shrink-0"
           />
           <div>
-            <p className="font-body text-sm font-semibold text-foreground">
+            <p
+              className="font-body text-sm font-semibold text-foreground"
+              style={{ fontSize: "clamp(1.1rem, 1vw, 1.3rem)" }}
+            >
               Free Returns
             </p>
-            <p className="font-body text-xs text-muted-foreground mt-0.5">
+            <p className="font-body text-base mt-0.5">
               Return within 30 days for a full refund.
             </p>
           </div>
@@ -84,12 +90,13 @@ export default function ProductInfo({ product }) {
           {/* Section toggle button */}
           <button
             onClick={() => toggleSection(section.id)}
-            className="w-full flex items-center justify-between py-4 font-body text-sm font-semibold text-foreground hover:text-muted-foreground transition-colors"
+            className="w-full flex items-center justify-between py-4 font-body  font-semibold text-foreground hover:text-muted-foreground transition-colors"
+            style={{ fontSize: "clamp(1.1rem, 1vw, 1.3rem)" }}
           >
             {section.title}
             <ChevronDown
-              size={16}
-              strokeWidth={1.75}
+              size={25}
+              strokeWidth={2}
               className={`transition-transform duration-200 ${
                 openSection === section.id ? "rotate-180" : ""
               }`}
@@ -99,7 +106,7 @@ export default function ProductInfo({ product }) {
           {/* Section content — only visible when open */}
           {openSection === section.id && (
             <div className="pb-4">
-              <p className="font-body text-sm text-muted-foreground leading-relaxed">
+              <p className="font-body text-base leading-relaxed">
                 {section.content}
               </p>
             </div>
