@@ -73,13 +73,13 @@ const sortOptions = [
 // ─────────────────────────────────────────────────────────────────────────────
 function SidebarContent({ categories, activeCategory, setActiveCategory }) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-red-400">
       {/* Clear filter button — only rendered when a category is actively selected */}
       {activeCategory && (
         <div className="pb-4 border-b border-zinc-200 mb-1">
           <button
             onClick={() => setActiveCategory(null)}
-            className="font-body text-base md:text-sm font-semibold text-red-500 hover:text-red-700 underline underline-offset-2 transition-colors"
+            className="font-body text-base md:text-base font-semibold text-red-500 hover:text-red-700 underline underline-offset-2 transition-colors"
           >
             Clear Filter
           </button>
@@ -104,7 +104,7 @@ function SidebarContent({ categories, activeCategory, setActiveCategory }) {
                 setActiveCategory(activeCategory === cat ? null : cat)
               }
               className={`
-                w-full text-left font-body py-2.5 md:py-2 pl-3 border-l-2 transition-colors
+                w-full text-left font-body py-2.5 pl-2 md:py-2  border-l-2 transition-colors
                 text-lg md:text-base
                 ${
                   activeCategory === cat

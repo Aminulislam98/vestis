@@ -18,7 +18,7 @@ const ProductCard = ({ product }) => {
           - group-hover:scale-105 → subtle zoom on card hover */}
       <div className="relative overflow-hidden w-full bg-[#f6f6f6] aspect-3/4 max-h-100 md:max-h-105 2xl:max-h-150">
         <Image
-          src={product.images[0]}
+          src={product.images[0].url}
           alt={product.name}
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
