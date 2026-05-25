@@ -3,11 +3,19 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { SlidersHorizontal, ChevronDown, X } from "lucide-react";
+import ProductCard from "../product/ProductCard";
 
-// ─────────────────────────────────────────────
-// CATEGORIES — conditional by gender
-// Add / remove items here as needed
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// CONSTANTS — category lists & sort options
+//
+// 💡 EXTRACT CANDIDATE → lib/constants/products.js  (or constants/filters.js)
+//    Move `womenCategories`, `menCategories`, and `sortOptions` there.
+//    Then import them in any page that needs filtering/sorting.
+//    Nothing else needed — they are plain arrays with no dependencies.
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Categories shown in the sidebar — conditional on the `gender` prop
+// Add / remove category labels here as the catalogue grows
 const womenCategories = [
   "Tops & T-Shirts",
   "Hoodies & Sweatshirts",
@@ -28,9 +36,8 @@ const menCategories = [
   "Tracksuits",
 ];
 
-// ─────────────────────────────────────────────
-// SORT OPTIONS — add / remove as needed
-// ─────────────────────────────────────────────
+// Sort options shown in the top-bar dropdown
+// TODO: wire each option to actual sort logic (re-order array or router query param)
 const sortOptions = [
   "Featured",
   "Price: Low to High",
@@ -38,28 +45,36 @@ const sortOptions = [
   "Newest First",
 ];
 
-export default function ProductsPageClient({ products, gender }) {
-  const [filtersVisible, setFiltersVisible] = useState(true);
-  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
-  const [activeSort, setActiveSort] = useState("Featured");
+// ─────────────────────────────────────────────────────────────────────────────
+// PRODUCT CARD COMPONENT
+//
+// 💡 EXTRACT CANDIDATE → components/products/ProductCard.jsx
+//    Move the entire `ProductCard` function (below) to its own file.
+//    What to take with it:
+//      • The `ProductCard` function itself
+//      • No extra imports needed beyond: Image, Link (next)
+//    Props it receives:   { product }
+//    Product fields used: slug, images[0], name, brand, isOnSale, salePrice, price
+// ─────────────────────────────────────────────────────────────────────────────
 
-  // ── Category filter state
-  // null = nothing selected, string = selected category
-  // Click same category again → deselects (back to null)
-  // Wire setActiveCategory to router.push() later for server filtering
-  const [activeCategory, setActiveCategory] = useState(null);
-
-  // ── Gender-conditional category list
-  const categories =
-    gender?.toLowerCase() === "men" ? menCategories : womenCategories;
-
-  // ─────────────────────────────────────────────
-  // SIDEBAR CONTENT — shared by desktop + mobile
-  // ─────────────────────────────────────────────
-  const SidebarContent = () => (
+// ─────────────────────────────────────────────────────────────────────────────
+// SIDEBAR CONTENT COMPONENT
+//
+// 💡 EXTRACT CANDIDATE → components/products/FilterSidebar.jsx
+//    Move the entire `SidebarContent` function (below) to its own file.
+//    What to take with it:
+//      • The `SidebarContent` function itself
+//    Props it receives:   { categories, activeCategory, setActiveCategory }
+//    What stays here:     The <aside> wrapper + mobile drawer shell — those
+//                         are layout concerns that belong in the page component.
+//
+//    When you add more filter types (Size, Fit, Sale toggle, Brand):
+//    create a separate FilterSection component and compose them inside here.
+// ─────────────────────────────────────────────────────────────────────────────
+function SidebarContent({ categories, activeCategory, setActiveCategory }) {
+  return (
     <div className="flex flex-col">
-      {/* Clear — only visible when a category is active */}
+      {/* Clear filter button — only rendered when a category is actively selected */}
       {activeCategory && (
         <div className="pb-4 border-b border-zinc-200 mb-1">
           <button
@@ -71,22 +86,21 @@ export default function ProductsPageClient({ products, gender }) {
         </div>
       )}
 
-      {/* ── CATEGORY LIST
-          Single select — one active at a time
-          Active  → bold + solid left black border
-          Default → normal weight, transparent border
-          Hover   → zinc-600 text + zinc-400 border
-          Text    → text-lg mobile / text-base desktop
-      */}
+      {/* Category filter heading */}
       <p className="font-body text-xl md:text-base font-semibold text-black py-4">
         Category
       </p>
+
+      {/* Category list — single select
+          Active  → bold text + solid black left border (2px)
+          Default → normal weight + transparent border
+          Hover   → zinc-600 text + zinc-400 border
+          Clicking the already-active category deselects it (toggle) */}
       <ul className="flex flex-col gap-0.5">
         {categories.map((cat) => (
           <li key={cat}>
             <button
               onClick={() =>
-                // toggle: click active category → deselect
                 setActiveCategory(activeCategory === cat ? null : cat)
               }
               className={`
@@ -105,20 +119,66 @@ export default function ProductsPageClient({ products, gender }) {
         ))}
       </ul>
 
-      {/* ── ADD MORE FILTERS HERE LATER
-          e.g. Size, Colour, Fit, Sale, Collections
-          Each will be its own FilterSection component
-      */}
+      {/* ── ADD MORE FILTER SECTIONS HERE
+          e.g. <SizeFilter />, <FitFilter />, <BrandFilter />, <SaleToggle />
+          Each should be its own small component accepting value + onChange props */}
     </div>
   );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SORT DROPDOWN COMPONENT
+//
+// 💡 EXTRACT CANDIDATE → components/products/SortDropdown.jsx
+//    Move the sort dropdown JSX block (below) to its own file.
+//    What to take with it:
+//      • The sort dropdown div + button + options list
+//      • `sortOptions` constant (or import from lib/constants/products.js)
+//      • ChevronDown import from lucide-react
+//    Props it receives:   { activeSort, sortOpen, setSortOpen, setActiveSort }
+//    What stays here:     Just <SortDropdown ... /> in the top bar
+// ─────────────────────────────────────────────────────────────────────────────
+// (Sort dropdown is currently inlined in the top bar below for simplicity.
+//  Extract it when the top-bar section grows or needs reuse on other pages.)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MAIN PAGE COMPONENT — ProductsPageClient
+//
+// Responsibilities:
+//   • Owns all filter/sort UI state
+//   • Controls sidebar visibility (desktop collapse + mobile drawer)
+//   • Renders: page header → top bar → sidebar → product grid
+//
+// This component is intentionally kept as the orchestrator.
+// The heavy UI pieces (ProductCard, SidebarContent) are already separated above.
+// ─────────────────────────────────────────────────────────────────────────────
+export default function ProductsPageClient({ products, gender }) {
+  // Sidebar visibility — desktop: collapses aside panel; mobile: opens drawer
+  const [filtersVisible, setFiltersVisible] = useState(true);
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  // Sort dropdown open/close state + currently selected sort label
+  const [sortOpen, setSortOpen] = useState(false);
+  const [activeSort, setActiveSort] = useState("Featured");
+
+  // Active category filter — null means no filter applied
+  // TODO: when wiring to the server, push this value as a URL query param
+  //       so the page fetches pre-filtered products from the DB
+  const [activeCategory, setActiveCategory] = useState(null);
+
+  // Pick the correct category list based on which gender page we're on
+  const categories =
+    gender?.toLowerCase() === "men" ? menCategories : womenCategories;
 
   return (
-    <div className="w-full 2xl:px-80 min-h-screen bg-background">
-      {/* Page header */}
-      <div className="w-full px-4 md:px-8 lg:px-12 pt-5 pb-4">
+    <div className="w-full xl:max-w-457.5 mx-auto min-h-screen bg-background">
+      {/* ── PAGE HEADER
+          Shows gender label + total product count
+          Font size uses clamp() so it scales between mobile and wide desktop */}
+      <div className="w-full px-3 md:px-8 lg:px-12 pt-2 ">
         <h1
           className="font-heading text-foreground tracking-wide"
-          style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }}
+          style={{ fontSize: "clamp(1.5rem, 3vw, 1.5rem)" }}
         >
           {`${gender} CLOTHING`}
           <span
@@ -130,9 +190,13 @@ export default function ProductsPageClient({ products, gender }) {
         </h1>
       </div>
 
-      {/* Top bar — sticky */}
-      <div className="sticky top-16 z-30 w-full px-4 md:px-8 lg:px-12 py-3  bg-background flex items-center justify-between">
-        {/* Toggle sidebar — desktop / opens drawer on mobile */}
+      {/* ── TOP BAR — sticky below the site navbar (top-16)
+          Left:  "Hide / Show Filters" toggle button
+          Right: "Sort By" dropdown
+          z-30 keeps it above product cards but below any modals/drawers */}
+      <div className="sticky top-16 z-30 w-full px-4 md:px-8 lg:px-12 py-3 bg-background flex items-center justify-between ">
+        {/* Filter toggle — on desktop collapses the sidebar aside;
+            on mobile opens the drawer (both states share one boolean pair) */}
         <button
           onClick={() => {
             setFiltersVisible(!filtersVisible);
@@ -144,7 +208,8 @@ export default function ProductsPageClient({ products, gender }) {
           {filtersVisible ? "Hide Filters" : "Show Filters"}
         </button>
 
-        {/* Sort dropdown */}
+        {/* 💡 EXTRACT CANDIDATE: move this sort dropdown block to SortDropdown.jsx
+            Props needed: activeSort, sortOpen, setSortOpen, setActiveSort, sortOptions */}
         <div className="relative">
           <button
             onClick={() => setSortOpen(!sortOpen)}
@@ -158,6 +223,7 @@ export default function ProductsPageClient({ products, gender }) {
             />
           </button>
 
+          {/* Dropdown panel — absolute positioned below the trigger button */}
           {sortOpen && (
             <div className="absolute right-0 top-10 z-30 bg-background border border-border w-56 shadow-sm">
               {sortOptions.map((option) => (
@@ -166,6 +232,7 @@ export default function ProductsPageClient({ products, gender }) {
                   onClick={() => {
                     setActiveSort(option);
                     setSortOpen(false);
+                    // TODO: wire sort to re-order `products` or push router query param
                   }}
                   className={`w-full text-left px-5 py-3 font-body text-base transition-colors hover:bg-accent ${
                     activeSort === option
@@ -181,33 +248,42 @@ export default function ProductsPageClient({ products, gender }) {
         </div>
       </div>
 
-      {/* Main content */}
-      <div className="w-full sm:px-4 md:px-8 lg:px-12 flex gap-8 mt-6">
-        {/* Desktop sidebar — w-44 narrow so product grid gets more room */}
+      {/* ── MAIN CONTENT AREA — sidebar + product grid side by side */}
+      <div className="w-full sm:px-4 md:px-8 lg:px-12 flex gap-8 ">
+        {/* DESKTOP SIDEBAR — hidden below xl breakpoint
+            sticky top-32 keeps it in view while the grid scrolls
+            When filtersVisible=false this aside is completely removed from layout */}
         {filtersVisible && (
-          <aside className="hidden md:block w-44 shrink-0">
+          <aside className="hidden xl:block w-60 shrink-0">
             <div className="sticky top-32 overflow-y-auto max-h-[calc(100vh-8rem)] pr-1">
-              <SidebarContent />
+              <SidebarContent
+                categories={categories}
+                activeCategory={activeCategory}
+                setActiveCategory={setActiveCategory}
+              />
             </div>
           </aside>
         )}
 
-        {/* Mobile filter drawer — slides in from left */}
+        {/* MOBILE FILTER DRAWER — only rendered on small screens (md:hidden)
+            Fixed full-screen overlay: backdrop (left) + drawer panel (right)
+            Clicking the backdrop also closes the drawer */}
         {mobileFilterOpen && (
-          <div className="fixed inset-0 z-50 md:hidden">
-            {/* Backdrop — click to close */}
+          <div className="fixed inset-0 z-50 md:hidden ">
+            {/* Semi-transparent backdrop — click closes the drawer */}
             <div
               className="absolute inset-0 bg-black/50"
               onClick={() => setMobileFilterOpen(false)}
             />
-            {/* Drawer panel */}
-            <div className="absolute top-0 left-0 h-full w-80 bg-background flex flex-col overflow-y-auto">
-              {/* Drawer header */}
+
+            {/* Drawer panel — slides in from the left edge */}
+            <div className="absolute top-0 left-0 h-full w-full bg-background flex flex-col overflow-y-auto ">
+              {/* Drawer header — sticky so it stays visible when filter list scrolls */}
               <div className="flex items-center justify-between px-5 h-16 border-b border-border sticky top-0 bg-background z-10">
                 <span className="font-body text-xl font-semibold text-black">
                   Filters
                 </span>
-                {/* Close button — w-12 h-12 large tap target, X size 26 clearly visible */}
+                {/* Close button — w-12 h-12 gives a large tap target on mobile */}
                 <button
                   onClick={() => setMobileFilterOpen(false)}
                   aria-label="Close filters"
@@ -216,91 +292,33 @@ export default function ProductsPageClient({ products, gender }) {
                   <X size={26} strokeWidth={2} className="text-black" />
                 </button>
               </div>
-              {/* Drawer body */}
+
+              {/* Drawer body — same SidebarContent reused from desktop */}
               <div className="px-5 py-4">
-                <SidebarContent />
+                <SidebarContent
+                  categories={categories}
+                  activeCategory={activeCategory}
+                  setActiveCategory={setActiveCategory}
+                />
               </div>
             </div>
           </div>
         )}
 
-        {/* Product grid */}
+        {/* PRODUCT GRID
+            Always 2 cols on mobile, 3 cols on desktop.
+            Hiding the sidebar makes each card wider — not more columns.
+            flex-1 min-w-0 prevents grid overflow when sidebar is visible */}
         <div className="flex-1 min-w-0">
-          {/* Always 2 cols mobile, 3 cols desktop — same as Nike
-              Sidebar hiding makes each card bigger, not more columns */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-x-2 gap-y-8">
+          <div
+            className={`grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2  gap-2 sm:gap-x-4 gap-y-8 ${filtersVisible ? "lg:grid-cols-3 xl:grid-cols-3" : "lg:grid-cols-4 xl:grid-cols-4"}`}
+          >
             {products.map((product) => (
-              <Link
-                key={product._id}
-                href={`/products/${product.slug}`}
-                className="group block"
-              >
-                {/* Product image
-                    Mobile  → aspect-[3/4] tall portrait, good for small screens
-                    Desktop → aspect-[2/3] slightly less tall, less vertical space wasted
-                    object-top keeps face/clothing visible, never crops the top
-                */}
-                {/* aspect-square matches Nike's 592x592 square image format
-                    object-top keeps clothing/face in frame, never crops top */}
-                <div className="relative overflow-hidden aspect-4/5 md:aspect-square bg-muted">
-                  <Image
-                    src={product.images[0]}
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                    className="md:object-cover object-contain md:object-top transition-transform duration-500 group-hover:scale-105"
-                    quality={90}
-                    priority
-                  />
-                </div>
-
-                {/* Product info
-                    Fixed Tailwind sizes — no clamp, consistent across all cards
-                    Mobile  → slightly larger for readability
-                    Desktop → tighter since more cards fit per row
-                */}
-                <div className="pt-2.5 px-1 pb-1">
-                  {/* Badge — Sale red / Just In orange */}
-                  {product.badge && (
-                    <p
-                      className={`font-body text-xs font-semibold mb-1 ${
-                        product.badge === "Sale"
-                          ? "text-red-500"
-                          : "text-orange-500"
-                      }`}
-                    >
-                      {product.badge}
-                    </p>
-                  )}
-                  {/* Product name */}
-                  <p className="font-body text-base 2xl:text-xl font-semibold text-foreground leading-snug">
-                    {product.name}
-                  </p>
-                  {/* Subtitle */}
-                  <p className="font-body text-base text-muted-foreground mt-0.5">
-                    {product.subtitle}
-                  </p>
-                  {/* Price */}
-                  <div className="flex items-center gap-2 mt-1.5">
-                    {product.originalPrice ? (
-                      <>
-                        {/* Sale price — red */}
-                        <span className="font-price text-sm font-bold text-red-500">
-                          £{product.price.toFixed(2)}
-                        </span>
-                        {/* Original price — strikethrough */}
-                        <span className="font-price text-sm text-muted-foreground line-through">
-                          £{product.originalPrice.toFixed(2)}
-                        </span>
-                      </>
-                    ) : (
-                      <span className="font-price text-sm font-bold text-foreground">
-                        £{product.price.toFixed(2)}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </Link>
+              /* ProductCard is its own component — see extraction note above */
+              <ProductCard
+                key={product._id ?? product.slug}
+                product={product}
+              />
             ))}
           </div>
         </div>

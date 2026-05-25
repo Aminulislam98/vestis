@@ -16,8 +16,8 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 border-b border-border bg-background w-full">
-        <div className="max-w-450 mx-auto px-3 sm:px-10 ">
+      <nav className="sticky top-0 z-50 border-b border-border bg-background w-full ">
+        <div className="max-w-450 mx-auto px-3  md:px-8 lg:px-12">
           <div className="flex items-center h-16 relative">
             {/* ── LEFT ── Hamburger + Logo */}
             <div className="flex items-center gap-3 flex-1">
