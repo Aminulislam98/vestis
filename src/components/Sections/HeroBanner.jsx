@@ -4,66 +4,153 @@ import Image from "next/image";
 export default function HeroBanner() {
   return (
     <section className="w-full">
-      {/* Desktop & Tablet — two images side by side */}
-      <div className="hidden md:flex w-full h-[88vh]">
-        {/* Left image */}
+      {/* Desktop */}
+      <div className="hidden md:flex w-full h-[95vh]">
         <div className="relative flex-1 h-full overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Out of office looks"
+            src="https://images.unsplash.com/photo-1758738180213-9320972d07eb?q=80&w=3271&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="New Collection"
             fill
             className="object-cover object-center"
             priority
           />
-          {/* Text overlay bottom left */}
-          <div className="absolute bottom-8 left-8">
-            <h1 className="font-heading text-white text-5xl lg:text-7xl leading-none tracking-wide drop-shadow-md">
-              OUT OF OFFICE
-              <br />
-              LOOKS
-            </h1>
-          </div>
-        </div>
 
-        {/* Right image */}
-        <div className="relative flex-1 h-full overflow-hidden">
-          <Image
-            src="https://img.magnific.com/free-photo/full-shot-punk-woman-posing_23-2149267435.jpg?t=st=1779574998~exp=1779578598~hmac=07c287ffae1a32a320470640f7f631f2aab293fa12ac4ae4ebaad0080bc37a69&w=2000"
-            alt="Shop new arrivals"
-            fill
-            className="object-cover object-center"
-            priority
-          />
-          {/* Shop now button bottom right */}
-          <div className="absolute bottom-8 right-8">
-            <Link
-              href="/products?gender=womens"
-              className="bg-white text-black font-body font-semibold text-sm tracking-widest uppercase px-6 py-3 hover:bg-black hover:text-white transition-colors duration-300"
+          {/* Dark overlay — heavier at bottom */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
+
+          {/* Top-left house mark */}
+          <div className="absolute top-10 left-12">
+            <p
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                letterSpacing: "0.35em",
+              }}
+              className="text-white/60 text-[10px] uppercase font-light"
             >
-              Shop Now
-            </Link>
+              Est. 2024 &nbsp;·&nbsp; London
+            </p>
+          </div>
+
+          {/* Top-right season tag */}
+          <div className="absolute top-10 right-12">
+            <p
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                letterSpacing: "0.3em",
+              }}
+              className="text-white/50 text-[10px] uppercase font-light"
+            >
+              Spring — Summer 2025
+            </p>
+          </div>
+
+          {/* Main content — bottom left */}
+          <div className="absolute bottom-0 left-0 right-0 px-12 pb-16">
+            {/* Thin rule */}
+            <div className="w-8 h-px bg-white/50 mb-8" />
+
+            {/* Collection label */}
+            <p
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                letterSpacing: "0.45em",
+              }}
+              className="text-white/60 text-[10px] uppercase mb-5 font-light"
+            >
+              New Collection
+            </p>
+
+            {/* Main headline */}
+            <h1
+              style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                letterSpacing: "0.02em",
+                lineHeight: "1.05",
+              }}
+              className="text-white font-light text-[72px] xl:text-[88px] max-w-3xl mb-8"
+            >
+              The Art of
+              <br />
+              <em className="not-italic font-extralight text-white/80">
+                Dressing Well.
+              </em>
+            </h1>
+
+            {/* Divider row */}
+            <div className="flex items-center gap-6 mb-10">
+              <div className="h-px w-12 bg-white/30" />
+              <p
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  letterSpacing: "0.15em",
+                }}
+                className="text-white/55 text-[13px] font-light uppercase"
+              >
+                Refined essentials, exceptional craft
+              </p>
+            </div>
+
+            {/* CTA row */}
+            <div className="flex items-center gap-10">
+              <Link
+                href="/products?gender=womens"
+                style={{
+                  letterSpacing: "0.3em",
+                  fontFamily: "'Cormorant Garamond', serif",
+                }}
+                className="text-white text-[11px] uppercase font-light border-b border-white/60 pb-0.5 hover:border-white hover:text-white/80 transition-all duration-300"
+              >
+                Shop Women
+              </Link>
+
+              <span className="text-white/30 text-xs">·</span>
+
+              <Link
+                href="/products?gender=mens"
+                style={{
+                  letterSpacing: "0.3em",
+                  fontFamily: "'Cormorant Garamond', serif",
+                }}
+                className="text-white text-[11px] uppercase font-light border-b border-white/60 pb-0.5 hover:border-white hover:text-white/80 transition-all duration-300"
+              >
+                Shop Men
+              </Link>
+
+              <span className="text-white/30 text-xs">·</span>
+
+              <Link
+                href="/products"
+                style={{
+                  letterSpacing: "0.3em",
+                  fontFamily: "'Cormorant Garamond', serif",
+                }}
+                className="text-white text-[11px] uppercase font-light border-b border-white/60 pb-0.5 hover:border-white hover:text-white/80 transition-all duration-300"
+              >
+                All Collections
+              </Link>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile — single image 60vh */}
+      {/* Mobile */}
       <div className="md:hidden relative w-full h-[60vh]">
         <Image
-          src="https://images.unsplash.com/photo-1652453860361-9ce55da944ce?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Out of office looks"
+          src="https://images.unsplash.com/photo-1756451182421-d2a1961638c9?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="New Collection"
           fill
-          className="object-cover object-top"
+          className="object-cover object-center"
           priority
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
         <div className="absolute bottom-6 left-5 right-5">
-          <h1 className="font-heading text-white text-4xl leading-none tracking-wide">
-            OUT OF OFFICE
-            <br />
-            LOOKS
-          </h1>
           <Link
-            href="/shop"
-            className="inline-block mt-4 bg-white text-black font-body font-semibold text-xs tracking-widest uppercase px-5 py-2.5 hover:bg-black hover:text-white transition-colors duration-300"
+            href="/products"
+            style={{
+              letterSpacing: "0.3em",
+              fontFamily: "'Cormorant Garamond', serif",
+            }}
+            className="inline-block text-white text-[11px] uppercase font-light border-b border-white/60 pb-0.5"
           >
             Shop Now
           </Link>

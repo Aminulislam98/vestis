@@ -121,12 +121,12 @@ export default function Navbar() {
                   key={link.label}
                   href={link.href}
                   className={`
-                    relative font-body text-sm font-medium tracking-widest uppercase
+                    relative font-body text-sm font-semibold tracking-widest text-black uppercase
                     transition-colors duration-200 py-1 group
                     ${
                       isActive(link.href)
                         ? "text-foreground"
-                        : "text-muted-foreground hover:text-foreground"
+                        : "text-black hover:text-foreground"
                     }
                   `}
                 >
@@ -170,12 +170,13 @@ export default function Navbar() {
               >
                 <Search size={20} strokeWidth={2} />
               </button>
-              <button
+              <Link
+                href={"/signup"}
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Account"
               >
                 <User size={20} strokeWidth={2} />
-              </button>
+              </Link>
               <button
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Wishlist"
