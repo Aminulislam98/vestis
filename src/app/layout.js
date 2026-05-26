@@ -7,7 +7,6 @@ import {
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar/Navbar";
 import Footer from "@/components/layout/Footer/Footer";
-import AnnouncementBanner from "@/components/layout/Navbar/AnnouncementBanner";
 
 const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "600"],
@@ -73,8 +72,8 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col">
         <Navbar />
-        <AnnouncementBanner />
-        {children}
+
+        <main>{children}</main>
         <Footer />
       </body>
     </html>
