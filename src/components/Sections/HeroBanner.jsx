@@ -3,159 +3,166 @@ import Image from "next/image";
 
 export default function HeroBanner() {
   return (
-    <section className="w-full">
-      {/* Desktop */}
-      <div className="hidden md:flex w-full h-[95vh]">
-        <div className="relative flex-1 h-full overflow-hidden">
+    <>
+      {/* Load fonts */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500&display=swap');
+      `}</style>
+
+      <section className="w-full">
+        {/* Desktop */}
+        <div className="hidden md:flex w-full h-[95vh]">
+          <div className="relative flex-1 h-full overflow-hidden">
+            <Image
+              src="https://images.unsplash.com/photo-1758738180213-9320972d07eb?q=80&w=3271&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              alt="New Collection"
+              fill
+              className="object-cover object-center"
+              priority
+            />
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+
+            {/* Top label */}
+            <div className="absolute top-10 left-12">
+              <p
+                style={{
+                  fontFamily: "'Barlow Condensed', sans-serif",
+                  letterSpacing: "0.25em",
+                }}
+                className="text-white/60 text-[11px] uppercase font-700"
+              >
+                Spring / Summer 2025
+              </p>
+            </div>
+
+            {/* Main content */}
+            <div className="absolute bottom-0 left-0 right-0 px-12 pb-16">
+              <p
+                style={{
+                  fontFamily: "'Barlow Condensed', sans-serif",
+                  letterSpacing: "0.3em",
+                }}
+                className="text-white/70 text-[11px] uppercase mb-4 font-bold"
+              >
+                New Collection
+              </p>
+
+              <h1
+                style={{
+                  fontFamily: "'Barlow Condensed', sans-serif",
+                  lineHeight: "0.92",
+                  letterSpacing: "-0.01em",
+                }}
+                className="text-white font-black text-[96px] xl:text-[120px] uppercase max-w-4xl mb-8"
+              >
+                Just
+                <br />
+                <span className="text-white/90">Wear It.</span>
+              </h1>
+
+              <p
+                style={{ fontFamily: "'Barlow', sans-serif" }}
+                className="text-white/65 text-[15px] font-medium max-w-sm mb-10 leading-relaxed tracking-wide"
+              >
+                Premium streetwear built for every move. Designed to last, made
+                to impress.
+              </p>
+
+              <div className="flex items-center gap-5">
+                <Link
+                  href="/products?gender=womens"
+                  style={{
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    letterSpacing: "0.15em",
+                  }}
+                  className="bg-white text-black font-bold text-[13px] uppercase px-10 py-4 hover:bg-black hover:text-white transition-all duration-200"
+                >
+                  Shop Women
+                </Link>
+                <Link
+                  href="/products?gender=mens"
+                  style={{
+                    fontFamily: "'Barlow Condensed', sans-serif",
+                    letterSpacing: "0.15em",
+                  }}
+                  className="bg-transparent border-2 border-white text-white font-bold text-[13px] uppercase px-10 py-4 hover:bg-white hover:text-black transition-all duration-200"
+                >
+                  Shop Men
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile */}
+        <div className="md:hidden relative w-full h-[100svh]">
           <Image
-            src="https://images.unsplash.com/photo-1758738180213-9320972d07eb?q=80&w=3271&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="https://images.unsplash.com/photo-1756451182421-d2a1961638c9?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="New Collection"
             fill
             className="object-cover object-center"
             priority
           />
 
-          {/* Dark overlay — heavier at bottom */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
 
-          {/* Top-left house mark */}
-          <div className="absolute top-10 left-12">
+          <div className="absolute bottom-0 left-0 right-0 px-6 pb-12">
             <p
               style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                letterSpacing: "0.35em",
-              }}
-              className="text-white/60 text-[10px] uppercase font-light"
-            >
-              Est. 2024 &nbsp;·&nbsp; London
-            </p>
-          </div>
-
-          {/* Top-right season tag */}
-          <div className="absolute top-10 right-12">
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
+                fontFamily: "'Barlow Condensed', sans-serif",
                 letterSpacing: "0.3em",
               }}
-              className="text-white/50 text-[10px] uppercase font-light"
-            >
-              Spring — Summer 2025
-            </p>
-          </div>
-
-          {/* Main content — bottom left */}
-          <div className="absolute bottom-0 left-0 right-0 px-12 pb-16">
-            {/* Thin rule */}
-            <div className="w-8 h-px bg-white/50 mb-8" />
-
-            {/* Collection label */}
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                letterSpacing: "0.45em",
-              }}
-              className="text-white/60 text-[10px] uppercase mb-5 font-light"
+              className="text-white/70 text-[11px] uppercase mb-3 font-bold"
             >
               New Collection
             </p>
 
-            {/* Main headline */}
             <h1
               style={{
-                fontFamily: "'Cormorant Garamond', serif",
-                letterSpacing: "0.02em",
-                lineHeight: "1.05",
+                fontFamily: "'Barlow Condensed', sans-serif",
+                lineHeight: "0.92",
+                letterSpacing: "-0.01em",
               }}
-              className="text-white font-light text-[72px] xl:text-[88px] max-w-3xl mb-8"
+              className="text-white font-black text-[72px] uppercase mb-5"
             >
-              The Art of
+              Just
               <br />
-              <em className="not-italic font-extralight text-white/80">
-                Dressing Well.
-              </em>
+              <span className="text-white/90">Wear It.</span>
             </h1>
 
-            {/* Divider row */}
-            <div className="flex items-center gap-6 mb-10">
-              <div className="h-px w-12 bg-white/30" />
-              <p
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  letterSpacing: "0.15em",
-                }}
-                className="text-white/55 text-[13px] font-light uppercase"
-              >
-                Refined essentials, exceptional craft
-              </p>
-            </div>
+            <p
+              style={{ fontFamily: "'Barlow', sans-serif" }}
+              className="text-white/65 text-[14px] font-medium max-w-xs mb-8 leading-relaxed"
+            >
+              Premium streetwear built for every move.
+            </p>
 
-            {/* CTA row */}
-            <div className="flex items-center gap-10">
+            <div className="flex flex-col gap-3">
               <Link
                 href="/products?gender=womens"
                 style={{
-                  letterSpacing: "0.3em",
-                  fontFamily: "'Cormorant Garamond', serif",
+                  fontFamily: "'Barlow Condensed', sans-serif",
+                  letterSpacing: "0.15em",
                 }}
-                className="text-white text-[11px] uppercase font-light border-b border-white/60 pb-0.5 hover:border-white hover:text-white/80 transition-all duration-300"
+                className="bg-white text-black font-bold text-[13px] uppercase px-6 py-4 text-center hover:bg-black hover:text-white transition-all duration-200"
               >
                 Shop Women
               </Link>
-
-              <span className="text-white/30 text-xs">·</span>
-
               <Link
                 href="/products?gender=mens"
                 style={{
-                  letterSpacing: "0.3em",
-                  fontFamily: "'Cormorant Garamond', serif",
+                  fontFamily: "'Barlow Condensed', sans-serif",
+                  letterSpacing: "0.15em",
                 }}
-                className="text-white text-[11px] uppercase font-light border-b border-white/60 pb-0.5 hover:border-white hover:text-white/80 transition-all duration-300"
+                className="bg-transparent border-2 border-white text-white font-bold text-[13px] uppercase px-6 py-4 text-center hover:bg-white hover:text-black transition-all duration-200"
               >
                 Shop Men
-              </Link>
-
-              <span className="text-white/30 text-xs">·</span>
-
-              <Link
-                href="/products"
-                style={{
-                  letterSpacing: "0.3em",
-                  fontFamily: "'Cormorant Garamond', serif",
-                }}
-                className="text-white text-[11px] uppercase font-light border-b border-white/60 pb-0.5 hover:border-white hover:text-white/80 transition-all duration-300"
-              >
-                All Collections
               </Link>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Mobile */}
-      <div className="md:hidden relative w-full h-[60vh]">
-        <Image
-          src="https://images.unsplash.com/photo-1756451182421-d2a1961638c9?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="New Collection"
-          fill
-          className="object-cover object-center"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-        <div className="absolute bottom-6 left-5 right-5">
-          <Link
-            href="/products"
-            style={{
-              letterSpacing: "0.3em",
-              fontFamily: "'Cormorant Garamond', serif",
-            }}
-            className="inline-block text-white text-[11px] uppercase font-light border-b border-white/60 pb-0.5"
-          >
-            Shop Now
-          </Link>
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
