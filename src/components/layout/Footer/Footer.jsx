@@ -11,17 +11,15 @@ export default function Footer() {
       <div className="w-full px-6 sm:px-6 xl:px-10 pt-16 pb-10">
         {/* Newsletter — full width centred */}
         <div className="w-full text-center border-b border-border pb-16">
-          <TextAnimate animation="scaleUp" by="text">
-            <strong
-              className="block font-heading text-foreground"
-              style={{
-                fontSize: "clamp(2rem, 5vw, 4rem)",
-                letterSpacing: "0.05em",
-              }}
-            >
-              GET 10% OFF YOUR FIRST ORDER
-            </strong>
-          </TextAnimate>
+          <strong
+            className="block font-heading text-foreground"
+            style={{
+              fontSize: "clamp(2rem, 5vw, 2rem)",
+              letterSpacing: "0.05em",
+            }}
+          >
+            GET 10% OFF YOUR FIRST ORDER
+          </strong>
           <p
             className="font-body text-muted-foreground mt-4 mx-auto max-w-2xl"
             style={{ fontSize: "clamp(0.9rem, 1.5vw, 1.25rem)" }}

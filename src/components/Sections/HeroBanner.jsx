@@ -14,7 +14,7 @@ export default function HeroBanner() {
         <div className="hidden md:flex w-full h-[95vh]">
           <div className="relative flex-1 h-full overflow-hidden">
             <Image
-              src="https://images.unsplash.com/photo-1758738180213-9320972d07eb?q=80&w=3271&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src="https://images.unsplash.com/photo-1635351002746-5813e205e1de?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="New Collection"
               fill
               className="object-cover object-center"
@@ -96,12 +96,12 @@ export default function HeroBanner() {
         </div>
 
         {/* Mobile */}
-        <div className="md:hidden relative w-full h-[100svh]">
+        <div className="md:hidden relative w-full h-[80vh]">
           <Image
-            src="https://images.unsplash.com/photo-1756451182421-d2a1961638c9?q=80&w=1364&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="https://images.unsplash.com/photo-1648322032206-888c91d99616?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="New Collection"
             fill
-            className="object-cover object-center"
+            className="object-cover"
             priority
           />
 
@@ -111,7 +111,7 @@ export default function HeroBanner() {
             <p
               style={{
                 fontFamily: "'Barlow Condensed', sans-serif",
-                letterSpacing: "0.3em",
+                letterSpacing: "0.4em",
               }}
               className="text-white/70 text-[11px] uppercase mb-3 font-bold"
             >
@@ -124,7 +124,7 @@ export default function HeroBanner() {
                 lineHeight: "0.92",
                 letterSpacing: "-0.01em",
               }}
-              className="text-white font-black text-[72px] uppercase mb-5"
+              className="text-white font-black text-[65px] uppercase mb-5"
             >
               Just
               <br />
@@ -133,7 +133,7 @@ export default function HeroBanner() {
 
             <p
               style={{ fontFamily: "'Barlow', sans-serif" }}
-              className="text-white/65 text-[14px] font-medium max-w-xs mb-8 leading-relaxed"
+              className="text-white text-base font-medium max-w-xs mb-8 leading-relaxed"
             >
               Premium streetwear built for every move.
             </p>
@@ -145,7 +145,7 @@ export default function HeroBanner() {
                   fontFamily: "'Barlow Condensed', sans-serif",
                   letterSpacing: "0.15em",
                 }}
-                className="bg-white text-black font-bold text-[13px] uppercase px-6 py-4 text-center hover:bg-black hover:text-white transition-all duration-200"
+                className="bg-white text-black font-bold text-base uppercase px-6 py-3 text-center hover:bg-black hover:text-white transition-all duration-200"
               >
                 Shop Women
               </Link>
@@ -155,7 +155,7 @@ export default function HeroBanner() {
                   fontFamily: "'Barlow Condensed', sans-serif",
                   letterSpacing: "0.15em",
                 }}
-                className="bg-transparent border-2 border-white text-white font-bold text-[13px] uppercase px-6 py-4 text-center hover:bg-white hover:text-black transition-all duration-200"
+                className="bg-transparent border-2 border-white text-white font-bold text-base uppercase px-6 py-3 text-center hover:bg-white hover:text-black transition-all duration-200"
               >
                 Shop Men
               </Link>

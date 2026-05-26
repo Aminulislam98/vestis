@@ -157,7 +157,7 @@ export default function Navbar() {
                 "
                 aria-label="Open search"
               >
-                <Search size={20} strokeWidth={2} />
+                <Search size={20} strokeWidth={1.5} className="text-black" />
                 <span className="font-body text-sm font-semibold">
                   Search...
                 </span>

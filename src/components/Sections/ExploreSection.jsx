@@ -82,7 +82,7 @@ export default function ExploreSection() {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8">
         {categories.map((cat) => (
           <Link key={cat.id} href={cat.href} className="group block">
             {/* ── Image container
@@ -134,8 +134,8 @@ export default function ExploreSection() {
             {/* ── Title below image — mobile only, hidden on desktop hover */}
             <div className="pt-3 pb-1 px-2 sm:px-0 lg:hidden">
               <p
-                className="font-body font-medium text-foreground text-center leading-snug"
-                style={{ fontSize: "clamp(0.9rem, 1.2vw, 1rem)" }}
+                className="tracking-wide font-medium text-foreground text-center leading-snug"
+                style={{ fontSize: "clamp(1.1rem, 1.2vw, 1.3rem)" }}
               >
                 {cat.title}
               </p>
