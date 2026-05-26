@@ -2,25 +2,26 @@
 import { useState } from "react";
 import { SlidersHorizontal, ChevronDown, X } from "lucide-react";
 import ProductCard from "../product/ProductCard";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const womenCategories = [
-  "Tops & T-Shirts",
-  "Hoodies & Sweatshirts",
-  "Dresses",
-  "Trousers",
-  "Skirts",
-  "Jackets",
-  "Co-ords",
-  "Bodysuits",
+  { label: "Tops & T-Shirts", value: "tops" },
+  { label: "Hoodies & Sweatshirts", value: "hoodies" },
+  { label: "Dresses", value: "dresses" },
+  { label: "Trousers", value: "trousers" },
+  { label: "Skirts", value: "skirts" },
+  { label: "Jackets", value: "jackets" },
+  { label: "Co-ords", value: "coords" },
+  { label: "Bodysuits", value: "bodysuits" },
 ];
 
 const menCategories = [
-  "T-Shirts & Vests",
-  "Hoodies & Sweatshirts",
-  "Joggers & Trousers",
-  "Shorts",
-  "Jackets",
-  "Tracksuits",
+  { label: "T-Shirts & Vests", value: "tshirts" },
+  { label: "Hoodies & Sweatshirts", value: "hoodies" },
+  { label: "Joggers & Trousers", value: "joggers" },
+  { label: "Shorts", value: "shorts" },
+  { label: "Jackets", value: "jackets" },
+  { label: "Tracksuits", value: "tracksuits" },
 ];
 
 const sortOptions = [
@@ -32,39 +33,41 @@ const sortOptions = [
 
 function SidebarContent({ categories, activeCategory, setActiveCategory }) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col py-3">
       {activeCategory && (
         <div className="pb-4 border-b border-border mb-1">
           <button
             onClick={() => setActiveCategory(null)}
-            className="font-body text-sm font-semibold text-red-500 hover:text-red-700 underline underline-offset-2 transition-colors"
+            className="font-body text-base font-semibold text-red-500 hover:text-red-700 underline underline-offset-2 transition-colors"
           >
             Clear Filter
           </button>
         </div>
       )}
 
-      <p className="font-body text-sm font-semibold text-foreground py-4 uppercase tracking-widest">
+      <p className="font-body text-base font-semibold text-foreground py-4 uppercase tracking-wide">
         Category
       </p>
 
-      <ul className="flex flex-col gap-0.5">
+      <ul className="flex flex-col">
         {categories.map((cat) => (
-          <li key={cat}>
+          <li key={cat.value}>
             <button
               onClick={() =>
-                setActiveCategory(activeCategory === cat ? null : cat)
+                setActiveCategory(
+                  activeCategory === cat.value ? null : cat.value,
+                )
               }
               className={`
-                w-full text-left font-body py-2 pl-2 border-l-2 transition-colors text-sm
+                w-full text-left font-body py-2 pl-2 border-l-2 transition-colors text-base
                 ${
-                  activeCategory === cat
+                  activeCategory === cat.value
                     ? "border-foreground text-foreground font-semibold"
                     : "border-transparent text-muted-foreground font-normal hover:text-foreground hover:border-border"
                 }
               `}
             >
-              {cat}
+              {cat.value}
             </button>
           </li>
         ))}
@@ -78,7 +81,16 @@ export default function ProductsPageClient({ products, gender }) {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [activeSort, setActiveSort] = useState("Featured");
-  const [activeCategory, setActiveCategory] = useState(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const activeCategory = searchParams.get("subcategory");
+
+  const setActiveCategory = (value) => {
+    const params = new URLSearchParams(searchParams);
+    if (value) params.set("subcategory", value);
+    else params.delete("category");
+    router.push(`?${params.toString()}`);
+  };
 
   const categories =
     gender?.toLowerCase() === "mens" ? menCategories : womenCategories;
@@ -112,9 +124,9 @@ export default function ProductsPageClient({ products, gender }) {
             setFiltersVisible(!filtersVisible);
             setMobileFilterOpen(!mobileFilterOpen);
           }}
-          className="flex items-center gap-2 font-body text-sm font-medium text-foreground hover:text-muted-foreground transition-colors"
+          className="flex items-center gap-2 font-body text-base font-medium text-foreground hover:text-muted-foreground transition-colors"
         >
-          <SlidersHorizontal size={16} strokeWidth={1.75} />
+          <SlidersHorizontal size={20} strokeWidth={1.75} />
           {filtersVisible ? "Hide Filters" : "Show Filters"}
         </button>
 
@@ -122,11 +134,11 @@ export default function ProductsPageClient({ products, gender }) {
         <div className="relative">
           <button
             onClick={() => setSortOpen(!sortOpen)}
-            className="flex items-center gap-2 font-body text-sm font-medium text-foreground hover:text-muted-foreground transition-colors"
+            className="flex items-center gap-2 font-body text-base font-medium text-foreground hover:text-muted-foreground transition-colors"
           >
             Sort By: {activeSort}
             <ChevronDown
-              size={16}
+              size={20}
               strokeWidth={1.75}
               className={`transition-transform duration-200 ${sortOpen ? "rotate-180" : ""}`}
             />
@@ -141,7 +153,7 @@ export default function ProductsPageClient({ products, gender }) {
                     setActiveSort(option);
                     setSortOpen(false);
                   }}
-                  className={`w-full text-left px-4 py-3 font-body text-sm transition-colors hover:bg-accent ${
+                  className={`w-full text-left px-4 py-3 font-body text-base transition-colors hover:bg-accent ${
                     activeSort === option
                       ? "text-foreground font-semibold"
                       : "text-muted-foreground"
