@@ -5,7 +5,7 @@ export default function HeroBanner() {
   return (
     <section className="w-full">
       {/* Desktop & Tablet — two images side by side */}
-      <div className="hidden md:flex w-full h-[90vh]">
+      <div className="hidden md:flex w-full h-[88vh]">
         {/* Left image */}
         <div className="relative flex-1 h-full overflow-hidden">
           <Image
@@ -37,7 +37,7 @@ export default function HeroBanner() {
           {/* Shop now button bottom right */}
           <div className="absolute bottom-8 right-8">
             <Link
-              href="/shop"
+              href="/products?gender=womens"
               className="bg-white text-black font-body font-semibold text-sm tracking-widest uppercase px-6 py-3 hover:bg-black hover:text-white transition-colors duration-300"
             >
               Shop Now

@@ -5,65 +5,65 @@ const categories = [
   {
     id: 1,
     title: "Women's Tops",
-    slug: "womens-tops",
+    href: "/products?gender=womens&subcategory=tops",
     image:
-      "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&q=95",
+      "https://uk.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-tie-dye-smocked-blouse--FVTP07708626_PM2_Front%20view.png?wid=4096&hei=4096",
     position: "object-top",
   },
   {
     id: 2,
     title: "Women's Bottoms",
-    slug: "womens-bottoms",
+    href: "/products?gender=womens&subcategory=trousers",
     image:
-      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=800&q=95",
+      "https://uk.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-signature-sequin-jeans--FVPB11GOW610_PM1_Cropped%20view.png?wid=4096&hei=4096",
     position: "object-center",
   },
   {
     id: 3,
     title: "Women's Shoes",
-    slug: "womens-shoes",
+    href: "/products?gender=womens&category=shoes",
     image:
-      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=800&q=95",
+      "https://images.unsplash.com/photo-1698609467326-fab7045d773c?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     position: "object-center",
   },
   {
     id: 4,
-    title: "Women's Accessories",
-    slug: "womens-accessories",
+    title: "Women's Hoodies",
+    href: "/products?gender=womens&subcategory=hoodies",
     image:
-      "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=95",
+      "https://tommy-europe.scene7.com/is/image/TommyEurope/WW0WW31998_YBR_main?wid=781&fmt=jpeg&qlt=95%2C1&op_sharpen=0&resMode=sharp2&op_usm=1.5%2C.5%2C0%2C0&iccEmbed=0&printRes=72",
     position: "object-top",
   },
   {
     id: 5,
     title: "Men's Tops",
-    slug: "mens-tops",
+    href: "/products?gender=mens&subcategory=tshirts",
     image:
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=95",
+      "https://tommy-europe.scene7.com/is/image/TommyEurope/DM0DM23253_BDS_main?wid=781&fmt=jpeg&qlt=95%2C1&op_sharpen=0&resMode=sharp2&op_usm=1.5%2C.5%2C0%2C0&iccEmbed=0&printRes=72",
     position: "object-top",
   },
   {
     id: 6,
     title: "Men's Bottoms",
-    slug: "mens-bottoms",
+    href: "/products?gender=mens&subcategory=joggers",
     image:
-      "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=800&q=95",
+      "https://static.zara.net/assets/public/7125/93b4/02db439aac9c/567a92dbbf42/00761419809-p/00761419809-p.jpg?ts=1774005719797&w=2048",
     position: "object-center",
   },
   {
     id: 7,
     title: "Men's Shoes",
-    slug: "mens-shoes",
+    href: "/products?gender=mens&category=shoes",
     image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=95",
+      "https://images.unsplash.com/photo-1543508282-6319a3e2621f?q=80&w=1615&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     position: "object-center",
   },
   {
     id: 8,
-    title: "Men's Accessories",
-    slug: "mens-accessories",
+    title: "Men's Hoodies",
+    href: "/products?gender=mens&subcategory=hoodies",
     image:
-      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=95",
+      "https://images.canadagoose.com/image/upload/w_1844,c_scale,f_auto,q_auto/v1762279358/product-image/1539UCD1_9082_fsph.jpg",
     position: "object-center",
   },
 ];
@@ -74,41 +74,79 @@ export default function ExploreSection() {
       {/* Title */}
       <div className="text-center mb-8 md:mb-12">
         <h2
-          className="font-logo text-foreground leading-tight font-semibold tracking-normal"
-          style={{ fontSize: "clamp(2rem, 3vw, 2.8rem)" }}
+          className="font-heading text-foreground leading-tight tracking-wide uppercase"
+          style={{ fontSize: "clamp(1.8rem, 3vw, 2.8rem)" }}
         >
-          Explore a Selection of Our
-          <br />
-          Collections
+          Explore Our Collections
         </h2>
       </div>
 
       {/* Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-8">
         {categories.map((cat) => (
-          <Link
-            key={cat.id}
-            href={`/category/${cat.slug}`}
-            className="group block"
-          >
-            {/* Image */}
+          <Link key={cat.id} href={cat.href} className="group block">
+            {/* ── Image container
+                hover → image darkens + title appears in centre */}
             <div className="relative overflow-hidden aspect-[3/4] lg:aspect-[4/5] bg-muted">
               <Image
                 src={cat.image}
                 alt={cat.title}
                 fill
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
-                className={`object-cover ${cat.position} transition-transform duration-500 group-hover:scale-105`}
+                className={`
+                  object-cover ${cat.position}
+                  transition-all duration-500
+                  group-hover:scale-105 group-hover:brightness-50
+                `}
                 quality={95}
                 priority
               />
+
+              {/* ── Hover overlay — title inside card, desktop only */}
+              <div
+                className="
+                absolute inset-0
+                hidden lg:flex flex-col items-center justify-center gap-3
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-300
+              "
+              >
+                {/* Category name */}
+                <p
+                  className="font-heading text-white text-center uppercase tracking-widest px-4"
+                  style={{ fontSize: "clamp(1rem, 1.5vw, 1.3rem)" }}
+                >
+                  {cat.title}
+                </p>
+
+                {/* CTA */}
+                <span
+                  className="
+                  font-body text-xs text-white uppercase tracking-widest
+                  border-b border-white pb-0.5
+                "
+                >
+                  Shop Now
+                </span>
+              </div>
             </div>
 
-            {/* Title */}
-            <div className="pt-3 pb-1 px-2 sm:px-0">
+            {/* ── Title below image — mobile only, hidden on desktop hover */}
+            <div className="pt-3 pb-1 px-2 sm:px-0 lg:hidden">
               <p
                 className="font-body font-medium text-foreground text-center leading-snug"
-                style={{ fontSize: "clamp(1rem, 1.2vw, 1rem)" }}
+                style={{ fontSize: "clamp(0.9rem, 1.2vw, 1rem)" }}
+              >
+                {cat.title}
+              </p>
+            </div>
+
+            {/* ── Desktop title below — shows when not hovering */}
+            <div className="hidden lg:block pt-3 pb-1">
+              <p
+                className="font-body font-medium text-foreground text-center leading-snug
+                  group-hover:opacity-0 transition-opacity duration-300"
+                style={{ fontSize: "clamp(0.9rem, 1.2vw, 1rem)" }}
               >
                 {cat.title}
               </p>

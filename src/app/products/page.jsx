@@ -1,16 +1,24 @@
 import ProductsPageClient from "@/components/ClientSidePage/ProductsPageClient";
 import React from "react";
 
-const getProducts = async (gender = "", category = "", search = "") => {
+const getProducts = async (
+  gender = "",
+  category = "",
+  search = "",
+  subcategory = "",
+  sort = "",
+) => {
   const params = new URLSearchParams();
   if (gender) params.set("gender", gender);
   if (category) params.set("category", category);
   if (search) params.set("search", search);
+  if (subcategory) params.set("subcategory", subcategory);
+  if (sort) params.set("sort", sort);
   const res = await fetch(
     `http://localhost:4000/products?${params.toString()}`,
   );
   const data = await res.json();
-  return data.data;
+  return data.data ?? [];
 };
 
 const Products = async ({ searchParams }) => {
@@ -18,7 +26,15 @@ const Products = async ({ searchParams }) => {
   const gender = sp.gender;
   const category = sp.category;
   const search = sp.search;
-  const products = await getProducts(gender, category, search);
+  const subcategory = sp.subcategory;
+  const sort = sp.sort;
+  const products = await getProducts(
+    gender,
+    category,
+    search,
+    subcategory,
+    sort,
+  );
 
   return (
     <div>

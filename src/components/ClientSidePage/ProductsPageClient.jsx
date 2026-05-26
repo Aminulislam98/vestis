@@ -31,11 +31,18 @@ const sortOptions = [
   "Newest First",
 ];
 
-function SidebarContent({ categories, activeCategory, setActiveCategory }) {
+function SidebarContent({
+  categories,
+  activeCategory,
+  setActiveCategory,
+  setMobileFilterOpen,
+  gender,
+  products,
+}) {
   return (
     <div className="flex flex-col py-3">
       {activeCategory && (
-        <div className="pb-4 border-b border-border mb-1">
+        <div className="pb-4">
           <button
             onClick={() => setActiveCategory(null)}
             className="font-body text-base font-semibold text-red-500 hover:text-red-700 underline underline-offset-2 transition-colors"
@@ -45,9 +52,27 @@ function SidebarContent({ categories, activeCategory, setActiveCategory }) {
         </div>
       )}
 
-      <p className="font-body text-base font-semibold text-foreground py-4 uppercase tracking-wide">
-        Category
-      </p>
+      {gender && (
+        <p className="font-body text-base font-semibold text-foreground  uppercase tracking-wide">
+          {`${gender}'s`}
+        </p>
+      )}
+      {/* {gender && (
+        <div className="w-full px-4 md:px-8 lg:px-12 pt-4">
+          <h1
+            className=" font-semibold"
+            style={{ fontSize: "clamp(1.5rem, 5vw, 1.7rem)" }}
+          >
+            {`${gender}`}
+            <span
+              className="font-body font-normal text-muted-foreground ml-3"
+              style={{ fontSize: "clamp(0.9rem, 1.5vw, 1rem)" }}
+            >
+              ({products.length})
+            </span>
+          </h1>
+        </div>
+      )} */}
 
       <ul className="flex flex-col">
         {categories.map((cat) => (
@@ -59,15 +84,15 @@ function SidebarContent({ categories, activeCategory, setActiveCategory }) {
                 )
               }
               className={`
-                w-full text-left font-body py-2 pl-2 border-l-2 transition-colors text-base
+                w-full text-left font-body py-2  transition-colors text-base
                 ${
                   activeCategory === cat.value
-                    ? "border-foreground text-foreground font-semibold"
+                    ? "border-foreground text-foreground font-semibold underline"
                     : "border-transparent text-muted-foreground font-normal hover:text-foreground hover:border-border"
                 }
               `}
             >
-              {cat.value}
+              {cat.label}
             </button>
           </li>
         ))}
@@ -88,8 +113,9 @@ export default function ProductsPageClient({ products, gender }) {
   const setActiveCategory = (value) => {
     const params = new URLSearchParams(searchParams);
     if (value) params.set("subcategory", value);
-    else params.delete("category");
+    else params.delete("subcategory");
     router.push(`?${params.toString()}`);
+    setMobileFilterOpen(false);
   };
 
   const categories =
@@ -99,20 +125,8 @@ export default function ProductsPageClient({ products, gender }) {
     // ── OUTER WRAPPER — no overflow, no min-h-screen
     <div className="w-full xl:max-w-457.5 mx-auto min-h-screen bg-background">
       {/* ── PAGE HEADER */}
-      <div className="w-full px-4 md:px-8 lg:px-12 pt-4 pb-2">
-        <h1
-          className="font-heading text-foreground tracking-wide"
-          style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)" }}
-        >
-          {`${gender} CLOTHING`}
-          <span
-            className="font-body font-normal text-muted-foreground ml-3"
-            style={{ fontSize: "clamp(0.9rem, 1.5vw, 1rem)" }}
-          >
-            ({products.length})
-          </span>
-        </h1>
-      </div>
+      {/* 
+    
 
       {/* ── TOP BAR
           MUST be outside the flex row (sidebar + grid)
@@ -150,6 +164,10 @@ export default function ProductsPageClient({ products, gender }) {
                 <button
                   key={option}
                   onClick={() => {
+                    const params = new URLSearchParams(searchParams);
+                    if (option) params.set("sort", option);
+                    else params.delete("sort");
+                    router.push(`?${params.toString()}`);
                     setActiveSort(option);
                     setSortOpen(false);
                   }}
@@ -179,6 +197,8 @@ export default function ProductsPageClient({ products, gender }) {
                 categories={categories}
                 activeCategory={activeCategory}
                 setActiveCategory={setActiveCategory}
+                gender={gender}
+                products={products}
               />
             </div>
           </aside>
@@ -216,21 +236,39 @@ export default function ProductsPageClient({ products, gender }) {
         )}
 
         {/* ── PRODUCT GRID */}
-        <div className="flex-1 min-w-0 py-4">
-          <div
-            className={`grid grid-cols-2 gap-2 sm:gap-x-4 gap-y-8 ${
-              filtersVisible
-                ? "lg:grid-cols-3 xl:grid-cols-3"
-                : "lg:grid-cols-4 xl:grid-cols-4"
-            }`}
-          >
-            {products.map((product) => (
-              <ProductCard
-                key={product._id ?? product.slug}
-                product={product}
-              />
-            ))}
-          </div>
+        <div className="flex-1 min-w-0 sm:py-4">
+          {products.length === 0 ? (
+            // ── Empty state
+            <div className="flex flex-col items-center justify-center py-32 gap-4">
+              <p className="font-heading text-2xl text-foreground tracking-wide">
+                No products found
+              </p>
+              <p className="font-body text-sm text-muted-foreground">
+                Try a different category or remove filters
+              </p>
+              <button
+                onClick={() => router.push(`/products?gender=${gender}`)}
+                className="mt-2 font-body text-sm text-foreground underline underline-offset-4 hover:text-muted-foreground transition-colors"
+              >
+                Clear all filters
+              </button>
+            </div>
+          ) : (
+            <div
+              className={`grid grid-cols-2 gap-2 sm:gap-x-4 gap-y-8 ${
+                filtersVisible
+                  ? "lg:grid-cols-3 xl:grid-cols-3"
+                  : "lg:grid-cols-4 xl:grid-cols-4"
+              }`}
+            >
+              {products.map((product) => (
+                <ProductCard
+                  key={product._id ?? product.slug}
+                  product={product}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

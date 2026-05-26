@@ -9,7 +9,7 @@ export default function Home() {
     <>
       <AnnouncementBanner />
       <HeroBanner />
-      <BrandMarquee />
+      {/* <BrandMarquee /> */}
       <ExploreSection />
       <TrendingSection />
     </>
