@@ -152,12 +152,13 @@ export default function Navbar() {
                   rounded-lg bg-accent
                   text-muted-foreground
                   hover:bg-accent/80
-                  transition-colors duration-200
+                  transition-colors duration-200 
+                  border
                 "
                 aria-label="Open search"
               >
-                <Search size={13} strokeWidth={2} />
-                <span className="font-body text-xs text-muted-foreground">
+                <Search size={20} strokeWidth={2} />
+                <span className="font-body text-sm font-semibold">
                   Search...
                 </span>
               </button>
