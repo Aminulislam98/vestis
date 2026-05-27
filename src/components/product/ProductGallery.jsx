@@ -1,174 +1,94 @@
 "use client";
 import { useState, useRef } from "react";
 import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Thumbs } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import "swiper/swiper-bundle.css";
+
 export default function ProductGallery({ images }) {
-  // ── Track which image is currently showing
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  // ── Touch swipe tracking refs
-  const touchStartX = useRef(null);
-  const touchEndX = useRef(null);
-
-  // ── Go to previous image — loops back to last when at first
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
-
-  // ── Go to next image — loops back to first when at last
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
-
-  // ── Record where touch started
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.targetTouches[0].clientX;
-  };
-
-  // ── Record where finger is moving
-  const handleTouchMove = (e) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-
-  // ── Calculate swipe direction when finger lifts
-  const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-
-    const distance = touchStartX.current - touchEndX.current;
-
-    // ── Swipe left → next image
-    if (distance > 50) handleNext();
-
-    // ── Swipe right → previous image
-    if (distance < -50) handlePrev();
-
-    // ── Reset touch values
-    touchStartX.current = null;
-    touchEndX.current = null;
-  };
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const swiperRef = useRef(null);
 
   return (
-    <div className="flex gap-0 w-full">
-      {/* ── LEFT THUMBNAILS
-          Hidden on mobile and tablet
-          Only shows on desktop lg+
-          Clicking sets that image as active */}
-      <div className="hidden lg:flex flex-col gap-2 w-16 shrink-0 px-1 ">
-        {images.map((img, index) => (
+    <div className="flex flex-col gap-2 w-full sm:mt-4">
+      {/* ── MAIN SWIPER */}
+      <div className="relative w-full">
+        <Swiper
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          spaceBetween={10}
+          thumbs={{
+            swiper:
+              thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
+          }}
+          modules={[FreeMode, Thumbs]}
+          className="w-full"
+        >
+          {images.map((img, index) => (
+            <SwiperSlide key={index}>
+              <div className="relative w-full" style={{ aspectRatio: "3 / 4" }}>
+                <Image
+                  src={img.url}
+                  alt={img.alt}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 45vw"
+                  className="object-cover"
+                  quality={95}
+                  priority={index === 0}
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        {/* ── CUSTOM ARROWS — bottom left, blur, fully rounded */}
+        <div className="absolute bottom-4 left-4 z-10 flex gap-2">
           <button
-            key={index}
-            onClick={() => setActiveIndex(index)}
-            aria-label={`View image ${index + 1}`}
-            className={`
-              relative w-full aspect-[3/4] overflow-hidden border-2 sm:rounded-xl
-              transition-all duration-200
-              ${
-                activeIndex === index
-                  ? "border-foreground"
-                  : "border-transparent hover:border-border"
-              }
-            `}
+            onClick={() => swiperRef.current?.slidePrev()}
+            className="w-9 h-9 rounded-full bg-white/40 backdrop-blur-md flex items-center justify-center hover:bg-white/60 transition-colors"
+            aria-label="Previous image"
           >
-            <Image
-              src={img.url}
-              alt={img.alt}
-              fill
-              sizes="64px"
-              className="object-cover object-center sm:rounded-md"
-              quality={80}
-            />
+            <ChevronLeft size={18} strokeWidth={1.75} />
           </button>
-        ))}
-      </div>
-
-      {/* ── MAIN IMAGE
-          Full width on mobile — no thumbnails
-          Takes remaining space on desktop
-          Touch swipe enabled on mobile */}
-      <div
-        className="relative flex-1 overflow-hidden w-full bg-[#f6f6f6] aspect-3/4 "
-        // style={{ height: "clamp(400px, 75vh, 550px)" }}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        <Image
-          src={images[activeIndex].url}
-          alt={images[activeIndex].alt}
-          // width={800}
-          // height={1000}
-          fill
-          sizes="(max-width: 1024px) 100vw, 45vw"
-          className="object-cover object-center transition-opacity duration-300 sm:rounded-md"
-          quality={95}
-          priority
-        />
-
-        {/* ── LEFT ARROW
-            Hidden on mobile — desktop only
-            Goes to previous image */}
-        <button
-          onClick={handlePrev}
-          className="hidden lg:flex absolute left-3 top-1/2 -translate-y-1/2 
-             w-9 h-9 
-             bg-background/60 
-             backdrop-blur-md 
-             rounded-full 
-             items-center justify-center 
-             hover:bg-background/80 
-             transition-colors"
-          aria-label="Previous image"
-        >
-          <ChevronLeft size={20} strokeWidth={1.75} />
-        </button>
-
-        <button
-          onClick={handleNext}
-          className="hidden lg:flex absolute right-3 top-1/2 -translate-y-1/2 
-             w-9 h-9 
-             bg-background/60 
-             backdrop-blur-md 
-             rounded-full 
-             items-center justify-center 
-             hover:bg-background/80 
-             transition-colors"
-          aria-label="Next image"
-        >
-          <ChevronRight size={20} strokeWidth={1.75} />
-        </button>
-
-        {/* ── BOTTOM INDICATOR
-            Mobile: dots — tap to jump to image
-            Desktop: number counter "1 / 3" */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:right-3 flex items-center gap-1.5 rounded">
-          {/* ── Dots — mobile only */}
-          <div className="flex lg:hidden items-center gap-1.5">
-            {images.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                aria-label={`Go to image ${index + 1}`}
-                className={`
-                  h-1.5 rounded-full transition-all duration-200
-                  ${
-                    activeIndex === index
-                      ? "bg-foreground w-3"
-                      : "bg-foreground/40 w-1.5"
-                  }
-                `}
-              />
-            ))}
-          </div>
-
-          {/* ── Number counter — desktop only */}
-          <div className="hidden lg:block bg-background/70 dark:bg-background/50 px-2 py-1">
-            <span className="font-body text-xs text-foreground">
-              {activeIndex + 1} / {images.length}
-            </span>
-          </div>
+          <button
+            onClick={() => swiperRef.current?.slideNext()}
+            className="w-9 h-9 rounded-full bg-white/40 backdrop-blur-md flex items-center justify-center hover:bg-white/60 transition-colors"
+            aria-label="Next image"
+          >
+            <ChevronRight size={18} strokeWidth={1.75} />
+          </button>
         </div>
       </div>
+
+      {/* ── THUMBNAIL SWIPER */}
+      <Swiper
+        onSwiper={setThumbsSwiper}
+        spaceBetween={8}
+        slidesPerView={4}
+        freeMode={true}
+        watchSlidesProgress={true}
+        modules={[FreeMode, Thumbs]}
+        className="w-full "
+      >
+        {images.map((img, index) => (
+          <SwiperSlide
+            key={index}
+            className="cursor-pointer opacity-50 [&.swiper-slide-thumb-active]:opacity-100 [&.swiper-slide-thumb-active]:border-2 [&.swiper-slide-thumb-active]:border-black"
+          >
+            <div className="relative w-full " style={{ aspectRatio: "3 / 4" }}>
+              <Image
+                src={img.url}
+                alt={img.alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 45vw"
+                className="object-cover"
+                quality={70}
+              />
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }
