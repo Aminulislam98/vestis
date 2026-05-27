@@ -1,87 +1,102 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Trash2, Heart, Minus, Plus } from "lucide-react";
-
-// ── Dummy cart items — replace with real API data later
-const initialItems = [
-  {
-    id: "1",
-    productId: "6a14aa40",
-    name: "Nike Icon Futura T-Shirt",
-    brand: "Nike",
-    category: "Men's T-Shirts",
-    size: "M",
-    colour: "White",
-    price: 24.99,
-    image:
-      "https://ik.imagekit.io/1rddifmjm/Products/Nike/mens/tops/nike%20mens%20top/M+NSW+TEE+ICON+FUTURA.avif",
-    quantity: 1,
-  },
-  {
-    id: "2",
-    productId: "6a1384b2",
-    name: "Nike Brush Fleece Pullover Hoodie",
-    brand: "Nike",
-    category: "Men's Tops",
-    size: "L",
-    colour: "Cream",
-    price: 74.99,
-    image:
-      "https://ik.imagekit.io/1rddifmjm/Products/Nike/mens/tops/nike%20mens%20top/M+NK+TF+SI+BRSH+PO+HD.avif",
-    quantity: 1,
-  },
-];
+import { getGuestId } from "@/lib/guestId";
+import Link from "next/link";
 
 export default function BagPageClient() {
-  // ── Cart items state — later replace initialItems with API fetch
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState([]);
 
-  // ── Promo code toggle
+  useEffect(() => {
+    const fetchCart = async () => {
+      const guestId = getGuestId();
+      const res = await fetch(`http://localhost:4000/cart?guestId=${guestId}`);
+      const data = await res.json();
+      setItems(data.items || []);
+    };
+    fetchCart();
+  }, []);
+
   const [promoOpen, setPromoOpen] = useState(false);
   const [promoCode, setPromoCode] = useState("");
 
   // ── Increase quantity
-  // TODO: connect to PATCH /cart/update
-  function handleIncrease(id) {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+  const handleIncrease = (productId, size) => {
+    const updateItems = items.map((item) =>
+      item.productId === productId && item.size === size
+        ? { ...item, quantity: item.quantity + 1 }
+        : item,
+    );
+    setItems(updateItems);
+    const updateItem = updateItems.find(
+      (item) => item.productId === productId && item.size === size,
+    );
+    const guestId = getGuestId();
+    fetch(`http://localhost:4000/cart/update`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        productId,
+        size,
+        guestId,
+        quantity: updateItem.quantity,
+      }),
+    });
+  };
+
+  // ── Decrease quantity
+  const handleDecrease = async (productId, size, quantity) => {
+    if (quantity === 1) return;
+    const updateProducts = items.map((item) =>
+      item.productId === productId && item.size === size
+        ? {
+            ...item,
+            quantity: item.quantity > 1 ? item.quantity - 1 : item.quantity,
+          }
+        : item,
+    );
+    setItems(updateProducts);
+    const updateItem = updateProducts.find(
+      (item) => item.productId === productId && item.size === size,
+    );
+    const guestId = getGuestId();
+    await fetch(`http://localhost:4000/cart/update`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        guestId,
+        productId,
+        size,
+        quantity: updateItem.quantity,
+      }),
+    });
+  };
+
+  // ── Remove item
+  const handleRemove = async (productId, size) => {
+    setItems(
+      items.filter(
+        (item) => !(item.productId === productId && item.size === size),
       ),
     );
-  }
+    const guestId = getGuestId();
+    await fetch(`http://localhost:4000/cart/delete`, {
+      method: "DELETE",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ guestId, productId, size }),
+    });
+  };
 
-  // ── Decrease quantity — remove item if quantity reaches 0
-  // TODO: connect to PATCH /cart/update or DELETE /cart/delete
-  function handleDecrease(id) {
-    setItems((prev) =>
-      prev
-        .map((item) =>
-          item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
-        )
-        .filter((item) => item.quantity > 0),
-    );
-  }
-
-  // ── Remove item from cart
-  // TODO: connect to DELETE /cart/delete
-  function handleRemove(id) {
-    setItems((prev) => prev.filter((item) => item.id !== id));
-  }
-
-  // ── Add to wishlist
-  // TODO: connect to wishlist API
+  // ── Wishlist
   function handleWishlist(id) {
     console.log("Add to wishlist:", id);
   }
 
-  // ── Calculate subtotal
-  const subtotal = items.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0,
-  );
-
-  // ── Free delivery threshold
+  // ── Calculate totals
+  const subtotal = Array.isArray(items)
+    ? items.reduce((acc, item) => acc + item.price * item.quantity, 0)
+    : 0;
   const deliveryThreshold = 50;
   const isDeliveryFree = subtotal >= deliveryThreshold;
   const deliveryCharge = isDeliveryFree ? 0 : 4.99;
@@ -89,32 +104,30 @@ export default function BagPageClient() {
 
   return (
     <div className="w-full min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-6 lg:py-10">
         {/* ── FREE DELIVERY BANNER */}
-        <div className="border border-border p-4 mb-6">
-          <p className="font-body font-semibold text-foreground text-sm">
+        <div className="border border-border p-4 mb-8">
+          <p className="font-body font-semibold text-foreground text-base">
             Free UK Delivery on orders over £{deliveryThreshold}
           </p>
-          <p className="font-body text-muted-foreground text-sm mt-0.5">
+          <p className="font-body text-muted-foreground text-sm mt-1">
             {isDeliveryFree
-              ? "You qualify for free delivery!"
+              ? "You qualify for free delivery! 🎉"
               : `Spend £${(deliveryThreshold - subtotal).toFixed(2)} more to get free delivery`}
           </p>
         </div>
 
-        {/* ── MAIN LAYOUT
-            Mobile: stacked — items top, summary below
-            Desktop: side by side — items left, summary right */}
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+        {/* ── MAIN LAYOUT */}
+        <div className="flex flex-col lg:flex-row gap-10 items-start">
           {/* ── LEFT — BAG ITEMS */}
-          <div className="w-full lg:flex-1 flex flex-col gap-0">
-            <h1 className="font-body font-semibold text-xl text-foreground mb-4">
-              Bag
+          <div className="w-full lg:flex-1 flex flex-col">
+            <h1 className="font-body font-semibold text-2xl text-foreground mb-6">
+              Bag ({items.length})
             </h1>
 
             {/* ── Empty bag */}
             {items.length === 0 && (
-              <div className="py-16 text-center">
+              <div className="py-24 text-center">
                 <p className="font-body text-muted-foreground text-base">
                   Your bag is empty
                 </p>
@@ -124,89 +137,123 @@ export default function BagPageClient() {
             {/* ── BAG ITEM LIST */}
             {items.map((item) => (
               <div
-                key={item.id}
-                className="flex gap-4 py-6 border-b border-border"
+                key={`${item.productId}-${item.size}`}
+                className="flex gap-4 sm:gap-6 py-6 border-b border-border"
               >
                 {/* ── PRODUCT IMAGE */}
-                <div className="relative w-28 h-36 shrink-0 bg-[#f6f6f6]">
+                <div
+                  className="relative w-28 sm:w-36 shrink-0 bg-[#f6f6f6]"
+                  style={{ aspectRatio: "3/4" }}
+                >
                   <Image
                     src={item.image}
                     alt={item.name}
                     fill
-                    sizes="112px"
+                    sizes="144px"
                     className="object-cover"
                   />
                 </div>
 
-                {/* ── PRODUCT DETAILS + ACTIONS */}
-                <div className="flex flex-col justify-between flex-1">
-                  {/* ── Top row — name + price */}
-                  <div className="flex justify-between items-start gap-2">
-                    <div className="flex flex-col gap-0.5">
-                      <p className="font-body font-semibold text-foreground text-sm">
-                        {item.brand}
-                      </p>
-                      <p className="font-body text-foreground text-sm">
-                        {item.name}
-                      </p>
+                {/* ── PRODUCT DETAILS */}
+                <div className="flex flex-col justify-between flex-1 gap-3">
+                  {/* ── Top — brand + name + meta */}
+                  <div className="flex flex-col gap-1">
+                    {/* ── Brand */}
+                    <p className="font-body font-semibold text-foreground text-base">
+                      {item.brand}
+                    </p>
+
+                    {/* ── Name */}
+                    <Link
+                      href={`/products/${item.slug}`}
+                      className="font-body text-foreground text-base hover:underline leading-snug"
+                    >
+                      {item.name}
+                    </Link>
+
+                    {/* ── Size + Colour */}
+                    <div className="flex flex-col gap-0.5 mt-1">
                       <p className="font-body text-muted-foreground text-sm">
-                        {item.category}
+                        Size:{" "}
+                        <span className="text-foreground font-medium">
+                          {item.size}
+                        </span>
                       </p>
                       {item.colour && (
                         <p className="font-body text-muted-foreground text-sm">
-                          {item.colour}
+                          Colour:{" "}
+                          <span className="text-foreground font-medium">
+                            {item.colour}
+                          </span>
                         </p>
                       )}
-                      <p className="font-body text-muted-foreground text-sm">
-                        Size {item.size}
-                      </p>
                     </div>
 
-                    {/* ── Price */}
-                    <p className="font-price font-semibold text-foreground text-sm shrink-0">
+                    {/* ── PRICE — below details, bigger text */}
+                    <p className="font-price font-bold text-foreground text-xl mt-2">
                       £{(item.price * item.quantity).toFixed(2)}
                     </p>
+                    {/* ── Unit price if quantity > 1 */}
+                    {item.quantity > 1 && (
+                      <p className="font-body text-muted-foreground text-xs">
+                        £{item.price.toFixed(2)} each
+                      </p>
+                    )}
                   </div>
 
-                  {/* ── Bottom row — quantity + actions */}
-                  <div className="flex items-center gap-3 mt-3">
+                  {/* ── Bottom — quantity controls + actions */}
+                  <div className="flex items-center gap-3">
                     {/* ── QUANTITY CONTROLS */}
                     <div className="flex items-center border border-border">
                       <button
-                        onClick={() => handleDecrease(item.id)}
-                        className="w-8 h-8 flex items-center justify-center hover:bg-accent transition-colors"
+                        onClick={() =>
+                          handleDecrease(
+                            item.productId,
+                            item.size,
+                            item.quantity,
+                          )
+                        }
+                        disabled={item.quantity === 1}
+                        className={`w-9 h-9 flex items-center justify-center transition-colors
+                          ${
+                            item.quantity === 1
+                              ? "opacity-40 cursor-not-allowed"
+                              : "hover:bg-accent"
+                          }`}
                         aria-label="Decrease quantity"
                       >
-                        <Minus size={14} strokeWidth={1.75} />
+                        <Minus size={15} strokeWidth={1.75} />
                       </button>
-                      <span className="w-8 h-8 flex items-center justify-center font-body text-sm">
+                      <span className="w-9 h-9 flex items-center justify-center font-body text-base font-medium">
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() => handleIncrease(item.id)}
-                        className="w-8 h-8 flex items-center justify-center hover:bg-accent transition-colors"
+                        onClick={() =>
+                          handleIncrease(item.productId, item.size)
+                        }
+                        className="w-9 h-9 flex items-center justify-center hover:bg-accent transition-colors"
                         aria-label="Increase quantity"
                       >
-                        <Plus size={14} strokeWidth={1.75} />
+                        <Plus size={15} strokeWidth={1.75} />
                       </button>
                     </div>
 
                     {/* ── DELETE BUTTON */}
                     <button
-                      onClick={() => handleRemove(item.id)}
-                      className="w-8 h-8 flex items-center justify-center border border-border hover:bg-accent transition-colors"
+                      onClick={() => handleRemove(item.productId, item.size)}
+                      className="w-9 h-9 flex items-center justify-center border border-border hover:bg-accent transition-colors"
                       aria-label="Remove item"
                     >
-                      <Trash2 size={14} strokeWidth={1.75} />
+                      <Trash2 size={15} strokeWidth={1.75} />
                     </button>
 
                     {/* ── WISHLIST BUTTON */}
                     <button
-                      onClick={() => handleWishlist(item.id)}
-                      className="w-8 h-8 flex items-center justify-center border border-border hover:bg-accent transition-colors"
+                      onClick={() => handleWishlist(item.productId)}
+                      className="w-9 h-9 flex items-center justify-center border border-border hover:bg-accent transition-colors"
                       aria-label="Add to wishlist"
                     >
-                      <Heart size={14} strokeWidth={1.75} />
+                      <Heart size={15} strokeWidth={1.75} />
                     </button>
                   </div>
                 </div>
@@ -214,11 +261,9 @@ export default function BagPageClient() {
             ))}
           </div>
 
-          {/* ── RIGHT — ORDER SUMMARY
-              Mobile: full width below items
-              Desktop: sticky right side */}
-          <div className="w-full lg:w-80 lg:sticky lg:top-20 lg:self-start flex flex-col gap-0">
-            <h2 className="font-body font-semibold text-xl text-foreground mb-4">
+          {/* ── RIGHT — ORDER SUMMARY */}
+          <div className="w-full lg:w-96 lg:sticky lg:top-20 lg:self-start flex flex-col">
+            <h2 className="font-body font-semibold text-2xl text-foreground mb-6">
               Summary
             </h2>
 
@@ -226,13 +271,11 @@ export default function BagPageClient() {
             <div className="border-t border-border">
               <button
                 onClick={() => setPromoOpen(!promoOpen)}
-                className="w-full flex items-center justify-between py-4 font-body text-sm text-foreground hover:opacity-70 transition-opacity"
+                className="w-full flex items-center justify-between py-4 font-body text-base text-foreground hover:opacity-70 transition-opacity"
               >
                 Do you have a Promo Code?
-                <span className="text-lg">{promoOpen ? "−" : "+"}</span>
+                <span className="text-xl">{promoOpen ? "−" : "+"}</span>
               </button>
-
-              {/* ── Promo input — shows when toggled */}
               {promoOpen && (
                 <div className="flex gap-2 pb-4">
                   <input
@@ -240,9 +283,9 @@ export default function BagPageClient() {
                     value={promoCode}
                     onChange={(e) => setPromoCode(e.target.value)}
                     placeholder="Enter promo code"
-                    className="flex-1 border border-border px-3 py-2 font-body text-sm bg-background text-foreground outline-none focus:border-foreground transition-colors"
+                    className="flex-1 border border-border px-3 py-3 font-body text-base bg-background text-foreground outline-none focus:border-foreground transition-colors"
                   />
-                  <button className="px-4 py-2 bg-foreground text-background font-body text-sm font-semibold hover:opacity-80 transition-opacity">
+                  <button className="px-5 py-3 bg-foreground text-background font-body text-base font-semibold hover:opacity-80 transition-opacity">
                     Apply
                   </button>
                 </div>
@@ -250,38 +293,40 @@ export default function BagPageClient() {
             </div>
 
             {/* ── SUBTOTAL */}
-            <div className="flex justify-between items-center py-3 border-t border-border">
-              <p className="font-body text-sm text-foreground">Subtotal</p>
-              <p className="font-price text-sm text-foreground">
+            <div className="flex justify-between items-center py-4 border-t border-border">
+              <p className="font-body text-base text-foreground">Subtotal</p>
+              <p className="font-price text-base font-medium text-foreground">
                 £{subtotal.toFixed(2)}
               </p>
             </div>
 
             {/* ── DELIVERY */}
-            <div className="flex justify-between items-center py-3 border-t border-border">
-              <p className="font-body text-sm text-foreground">
+            <div className="flex justify-between items-center py-4 border-t border-border">
+              <p className="font-body text-base text-foreground">
                 Estimated Delivery
               </p>
-              <p className="font-price text-sm text-foreground">
+              <p className="font-price text-base font-medium text-foreground">
                 {isDeliveryFree ? "Free" : `£${deliveryCharge.toFixed(2)}`}
               </p>
             </div>
 
             {/* ── TOTAL */}
-            <div className="flex justify-between items-center py-4 border-t border-b border-border">
-              <p className="font-body font-semibold text-foreground">Total</p>
-              <p className="font-price font-semibold text-foreground">
+            <div className="flex justify-between items-center py-5 border-t border-b border-border">
+              <p className="font-body font-semibold text-foreground text-lg">
+                Total
+              </p>
+              <p className="font-price font-bold text-foreground text-xl">
                 £{total.toFixed(2)}
               </p>
             </div>
 
             {/* ── CHECKOUT BUTTON */}
-            <button className="w-full py-4 bg-foreground text-background font-body font-semibold text-base hover:opacity-80 transition-opacity mt-4">
+            <button className="w-full py-4 bg-foreground text-background font-body font-semibold text-base hover:opacity-80 transition-opacity mt-5">
               Checkout
             </button>
 
             {/* ── TERMS */}
-            <p className="font-body text-xs text-muted-foreground mt-4 leading-relaxed">
+            <p className="font-body text-sm text-muted-foreground mt-4 leading-relaxed">
               By selecting checkout, you confirm that you have read and agree to
               our <span className="underline cursor-pointer">Terms of Use</span>
               , <span className="underline cursor-pointer">Terms of Sale</span>{" "}

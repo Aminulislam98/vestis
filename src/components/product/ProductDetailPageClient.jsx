@@ -4,6 +4,7 @@ import ProductGallery from "@/components/product/ProductGallery";
 import ProductInfo from "@/components/product/ProductInfo";
 import SizeSelector from "./SizeSelector";
 import { Heart } from "lucide-react";
+import AddToCartButton from "../actionsButtons/AddToCartButton";
 
 export default function ProductDetailPageClient({ product }) {
   const [selectedSize, setSelectedSize] = useState(null);
@@ -63,9 +64,7 @@ export default function ProductDetailPageClient({ product }) {
 
   const ActionButtons = () => (
     <div className="flex flex-col gap-3">
-      <button className="w-full py-4 bg-foreground text-background font-body font-semibold text-base hover:opacity-80 transition-opacity">
-        Add to Bag
-      </button>
+      <AddToCartButton selectedSize={selectedSize} product={product} />
       <button className="w-full py-4 border border-foreground text-foreground font-body font-semibold text-base hover:bg-accent transition-colors flex items-center justify-center gap-2">
         Favourite
         <Heart size={18} strokeWidth={1.75} />
@@ -162,9 +161,7 @@ export default function ProductDetailPageClient({ product }) {
         ${showStickyBar ? "translate-y-0" : "translate-y-full"}
       `}
       >
-        <button className="flex-1 py-3 bg-foreground text-background font-body font-semibold text-base hover:opacity-80 transition-opacity">
-          Add to Bag
-        </button>
+        <AddToCartButton selectedSize={selectedSize} product={product} />
         <button className="w-14 py-3 border border-foreground text-foreground flex items-center justify-center hover:bg-accent transition-colors">
           <Heart size={18} strokeWidth={1.75} />
         </button>

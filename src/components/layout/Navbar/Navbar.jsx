@@ -183,12 +183,13 @@ export default function Navbar() {
               >
                 <Heart size={20} strokeWidth={2} />
               </button>
-              <button
+              <Link
+                href={"/bag"}
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Bag"
               >
                 <ShoppingBag size={20} strokeWidth={2} />
-              </button>
+              </Link>
             </div>
           </div>
         </div>
