@@ -99,7 +99,7 @@ export default function Navbar() {
             {/* ── LEFT — Hamburger + Logo */}
             <div className="flex items-center gap-2 flex-1">
               <button
-                className="md:hidden p-1.5 rounded-md hover:bg-accent transition-colors"
+                className="md:hidden rounded-md hover:bg-accent transition-colors"
                 aria-label="Open menu"
                 onClick={() => setMobileMenuOpen(true)}
               >
