@@ -14,6 +14,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import useCartStore from "@/store/cartStore";
 import { getGuestId } from "@/lib/guestId";
+import { authClient } from "@/lib/auth-client";
 
 const navLinks = [
   {
@@ -58,7 +59,8 @@ export default function Navbar() {
   const { cartCount, setCartCount } = useCartStore();
   const [visible, setVisible] = useState(true);
   const [lastY, setLastY] = useState(0);
-  console.log("this is total count:", cartCount);
+
+  const { data: session } = authClient.useSession();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -89,9 +91,20 @@ export default function Navbar() {
 
   useEffect(() => {
     const fetchCount = async () => {
-      const guestId = getGuestId();
-      const res = await fetch(`http://localhost:4000/cart?guestId=${guestId}`);
+      if (session === undefined) return;
+      let url;
+      if (session?.user.id) {
+        url = `http://localhost:4000/cart?userId=${session?.user?.id}`;
+      } else {
+        const guestId = getGuestId();
+        url = `http://localhost:4000/cart?guestId=${guestId}`;
+        console.log("fetching count...");
+        console.log("session:", session?.user?.id);
+      }
+      const res = await fetch(url);
       const data = await res.json();
+      console.log("fetched data:", data);
+      console.log("items:", data.items);
 
       if (data.items && data.items.length > 0) {
         const totalQuantity = data.items.reduce(
@@ -105,7 +118,7 @@ export default function Navbar() {
       }
     };
     fetchCount();
-  }, []);
+  }, [session?.user?.id]);
 
   return (
     <>

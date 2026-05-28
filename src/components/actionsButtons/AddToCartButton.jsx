@@ -1,9 +1,12 @@
+"user client";
+import { authClient } from "@/lib/auth-client";
 import { getGuestId } from "@/lib/guestId";
 import useCartStore from "@/store/cartStore";
 import React from "react";
 import { toast } from "sonner";
 
 const AddToCartButton = ({ selectedSize, product }) => {
+  const { data: session } = authClient.useSession();
   const { incrementCart } = useCartStore();
   const handleAddToBag = async () => {
     // validating the size
@@ -28,7 +31,9 @@ const AddToCartButton = ({ selectedSize, product }) => {
       });
     }
 
-    const guestId = getGuestId();
+    const userId = session?.user?.id || null;
+
+    const guestId = userId ? null : getGuestId();
 
     const res = await fetch(`http://localhost:4000/cart/add`, {
       method: "POST",
@@ -37,6 +42,7 @@ const AddToCartButton = ({ selectedSize, product }) => {
       },
       body: JSON.stringify({
         guestId,
+        userId,
         productId: product._id,
         name: product.name,
         brand: product.brand,

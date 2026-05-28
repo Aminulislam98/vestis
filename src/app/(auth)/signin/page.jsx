@@ -11,6 +11,8 @@ export default function SigninPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // getting user session
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,6 +37,20 @@ export default function SigninPage() {
       toast.success("Welcome back!", {
         description: "You have successfully signed in.",
       });
+      const guestId = localStorage.getItem("vestis-guest-id");
+      if (guestId && data.user?.id) {
+        await fetch("http://localhost:4000/cart/merge", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            guestId,
+            userId: data.user?.id,
+          }),
+        });
+        localStorage.removeItem("vestis-guest-id");
+      }
 
       e.target.reset();
     } catch (err) {

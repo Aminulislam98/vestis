@@ -5,21 +5,30 @@ import { Trash2, Heart, Minus, Plus } from "lucide-react";
 import { getGuestId } from "@/lib/guestId";
 import Link from "next/link";
 import useCartStore from "@/store/cartStore";
+import { authClient } from "@/lib/auth-client";
 
 export default function BagPageClient() {
   const [items, setItems] = useState([]);
   const { incrementCart, decrementCart, setCartCount, cartCount } =
     useCartStore();
 
+  const { data: session } = authClient.useSession();
+
   useEffect(() => {
     const fetchCart = async () => {
-      const guestId = getGuestId();
-      const res = await fetch(`http://localhost:4000/cart?guestId=${guestId}`);
+      let url;
+      if (session?.user.id) {
+        url = `http://localhost:4000/cart?userId=${session?.user?.id}`;
+      } else {
+        const guestId = getGuestId();
+        url = `http://localhost:4000/cart?guestId=${guestId}`;
+      }
+      const res = await fetch(url);
       const data = await res.json();
       setItems(data.items || []);
     };
     fetchCart();
-  }, []);
+  }, [session?.user?.id]);
 
   const [promoOpen, setPromoOpen] = useState(false);
   const [promoCode, setPromoCode] = useState("");
@@ -37,12 +46,16 @@ export default function BagPageClient() {
       (item) => item.productId === productId && item.size === size,
     );
     incrementCart();
-    const guestId = getGuestId();
+
+    const userId = session?.user?.id || null;
+    const guestId = userId ? null : getGuestId();
+
     fetch(`http://localhost:4000/cart/update`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         productId,
+        userId,
         size,
         guestId,
         quantity: updateItem.quantity,
@@ -67,12 +80,15 @@ export default function BagPageClient() {
       (item) => item.productId === productId && item.size === size,
     );
     decrementCart();
-    const guestId = getGuestId();
+    const userId = session?.user?.id || null;
+
+    const guestId = userId ? null : getGuestId();
     await fetch(`http://localhost:4000/cart/update`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         guestId,
+        userId,
         productId,
         size,
         quantity: updateItem.quantity,
@@ -93,11 +109,12 @@ export default function BagPageClient() {
 
     setCartCount((prev) => prev - deletedItem.quantity);
 
-    const guestId = getGuestId();
+    const userId = session?.user?.id || null;
+    const guestId = userId ? null : getGuestId();
     await fetch(`http://localhost:4000/cart/delete`, {
       method: "DELETE",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ guestId, productId, size }),
+      body: JSON.stringify({ guestId, userId, productId, size }),
     });
   };
 
