@@ -12,6 +12,8 @@ import {
 import SearchModal from "./SearchModal";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import useCartStore from "@/store/cartStore";
+import { getGuestId } from "@/lib/guestId";
 
 const navLinks = [
   {
@@ -53,9 +55,10 @@ export default function Navbar() {
   const [expandedLink, setExpandedLink] = useState(null);
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
+  const { cartCount, setCartCount } = useCartStore();
   const [visible, setVisible] = useState(true);
   const [lastY, setLastY] = useState(0);
+  console.log("this is total count:", cartCount);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,6 +87,26 @@ export default function Navbar() {
     return false;
   };
 
+  useEffect(() => {
+    const fetchCount = async () => {
+      const guestId = getGuestId();
+      const res = await fetch(`http://localhost:4000/cart?guestId=${guestId}`);
+      const data = await res.json();
+
+      if (data.items && data.items.length > 0) {
+        const totalQuantity = data.items.reduce(
+          (acc, item) => acc + (item.quantity || 0),
+          0,
+        );
+
+        setCartCount(totalQuantity);
+      } else {
+        setCartCount(0);
+      }
+    };
+    fetchCount();
+  }, []);
+
   return (
     <>
       <nav
@@ -105,7 +128,6 @@ export default function Navbar() {
               >
                 <Menu size={20} strokeWidth={2} />
               </button>
-
               <Link
                 href="/"
                 className="font-heading text-xl tracking-[0.25em] uppercase text-foreground"
@@ -123,11 +145,7 @@ export default function Navbar() {
                   className={`
                     relative font-body text-sm font-semibold tracking-widest text-black uppercase
                     transition-colors duration-200 py-1 group
-                    ${
-                      isActive(link.href)
-                        ? "text-foreground"
-                        : "text-black hover:text-foreground"
-                    }
+                    ${isActive(link.href) ? "text-foreground" : "text-black hover:text-foreground"}
                   `}
                 >
                   {link.label}
@@ -144,17 +162,12 @@ export default function Navbar() {
 
             {/* ── RIGHT — Icons */}
             <div className="flex items-center gap-0.5 flex-1 justify-end">
+              {/* ── Search — desktop */}
               <button
                 onClick={() => setSearchOpen(true)}
-                className="
-                  hidden lg:flex items-center gap-2
-                  h-8 w-36 px-3 mr-2
-                  rounded-lg bg-accent
-                  text-muted-foreground
-                  hover:bg-accent/80
-                  transition-colors duration-200 
-                  border
-                "
+                className="hidden lg:flex items-center gap-2 h-8 w-36 px-3 mr-2
+                  rounded-lg bg-accent text-muted-foreground
+                  hover:bg-accent/80 transition-colors duration-200 border"
                 aria-label="Open search"
               >
                 <Search size={20} strokeWidth={1.5} className="text-black" />
@@ -163,6 +176,7 @@ export default function Navbar() {
                 </span>
               </button>
 
+              {/* ── Search — mobile */}
               <button
                 onClick={() => setSearchOpen(true)}
                 className="lg:hidden p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
@@ -170,6 +184,8 @@ export default function Navbar() {
               >
                 <Search size={20} strokeWidth={2} />
               </button>
+
+              {/* ── Account */}
               <Link
                 href={"/signup"}
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
@@ -177,18 +193,27 @@ export default function Navbar() {
               >
                 <User size={20} strokeWidth={2} />
               </Link>
+
+              {/* ── Wishlist */}
               <button
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Wishlist"
               >
                 <Heart size={20} strokeWidth={2} />
               </button>
+
+              {/* ── Bag — with count badge */}
               <Link
                 href={"/bag"}
-                className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
+                className="relative p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Bag"
               >
                 <ShoppingBag size={20} strokeWidth={2} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                    {cartCount > 99 ? "99+" : cartCount}
+                  </span>
+                )}
               </Link>
             </div>
           </div>
@@ -202,9 +227,8 @@ export default function Navbar() {
             className="absolute inset-0 bg-black/50"
             onClick={() => setMobileMenuOpen(false)}
           />
-
           <div className="absolute top-0 left-0 h-full w-full bg-background flex flex-col">
-            {/* Drawer header */}
+            {/* ── Drawer header */}
             <div className="flex items-center justify-between px-6 h-14 border-b border-border shrink-0">
               <Link
                 href="/"
@@ -222,11 +246,10 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* ── Nav links — accordion */}
+            {/* ── Nav links */}
             <div className="flex flex-col overflow-y-auto flex-1 px-6 mt-5">
               {navLinks.map((link) => (
-                <div key={link.label} className="">
-                  {/* ── Main row — full row is clickable to expand */}
+                <div key={link.label}>
                   <button
                     onClick={() =>
                       setExpandedLink(
@@ -235,36 +258,25 @@ export default function Navbar() {
                     }
                     className="w-full flex items-center justify-between py-1"
                   >
-                    {/* ── Nike style — large heading font, bold */}
                     <span
-                      className={`
-                      text-left font-semibold
-                        transition-colors duration-200
-                        ${isActive(link.href) ? "text-foreground" : "text-foreground"}
-                      `}
+                      className="text-left font-semibold text-foreground transition-colors duration-200"
                       style={{ fontSize: "clamp(1.2rem, 5vw, 2rem)" }}
                     >
                       {link.label}
                     </span>
-
-                    {/* Chevron — only if has subcategories */}
                     {link.subcategories.length > 0 && (
                       <ChevronDown
                         size={25}
                         strokeWidth={2}
-                        className={`
-                          text-muted-foreground transition-transform duration-200 shrink-0
-                          ${expandedLink === link.label ? "rotate-180" : ""}
-                        `}
+                        className={`text-muted-foreground transition-transform duration-200 shrink-0
+                          ${expandedLink === link.label ? "rotate-180" : ""}`}
                       />
                     )}
                   </button>
 
-                  {/* ── Subcategories — smooth expand */}
                   {expandedLink === link.label &&
                     link.subcategories.length > 0 && (
                       <div className="flex flex-col pb-4 gap-0">
-                        {/* ── View all link */}
                         <Link
                           href={link.href}
                           onClick={() => setMobileMenuOpen(false)}
@@ -272,8 +284,6 @@ export default function Navbar() {
                         >
                           View All {link.label}
                         </Link>
-
-                        {/* ── Subcategory items */}
                         {link.subcategories.map((sub) => (
                           <Link
                             key={sub.value}
@@ -294,21 +304,21 @@ export default function Navbar() {
             <div className="px-6 pb-10 pt-6 flex flex-col gap-4 border-t border-border shrink-0">
               <Link
                 href="#"
-                className="font-body text-base font-semibold transition-colors"
+                className="font-body text-base font-semibold"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 My Account
               </Link>
               <Link
                 href="#"
-                className="font-body text-base  font-semibold transition-colors"
+                className="font-body text-base font-semibold"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Wishlist
               </Link>
               <Link
                 href="#"
-                className="font-body text-base  font-semibold transition-colors"
+                className="font-body text-base font-semibold"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Help & FAQs

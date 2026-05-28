@@ -4,9 +4,12 @@ import Image from "next/image";
 import { Trash2, Heart, Minus, Plus } from "lucide-react";
 import { getGuestId } from "@/lib/guestId";
 import Link from "next/link";
+import useCartStore from "@/store/cartStore";
 
 export default function BagPageClient() {
   const [items, setItems] = useState([]);
+  const { incrementCart, decrementCart, setCartCount, cartCount } =
+    useCartStore();
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -22,6 +25,7 @@ export default function BagPageClient() {
   const [promoCode, setPromoCode] = useState("");
 
   // ── Increase quantity
+
   const handleIncrease = (productId, size) => {
     const updateItems = items.map((item) =>
       item.productId === productId && item.size === size
@@ -32,6 +36,7 @@ export default function BagPageClient() {
     const updateItem = updateItems.find(
       (item) => item.productId === productId && item.size === size,
     );
+    incrementCart();
     const guestId = getGuestId();
     fetch(`http://localhost:4000/cart/update`, {
       method: "PATCH",
@@ -46,6 +51,7 @@ export default function BagPageClient() {
   };
 
   // ── Decrease quantity
+
   const handleDecrease = async (productId, size, quantity) => {
     if (quantity === 1) return;
     const updateProducts = items.map((item) =>
@@ -60,6 +66,7 @@ export default function BagPageClient() {
     const updateItem = updateProducts.find(
       (item) => item.productId === productId && item.size === size,
     );
+    decrementCart();
     const guestId = getGuestId();
     await fetch(`http://localhost:4000/cart/update`, {
       method: "PATCH",
@@ -75,11 +82,17 @@ export default function BagPageClient() {
 
   // ── Remove item
   const handleRemove = async (productId, size) => {
+    const deletedItem = items.find(
+      (i) => i.productId === productId && i.size === size,
+    );
     setItems(
       items.filter(
         (item) => !(item.productId === productId && item.size === size),
       ),
     );
+
+    setCartCount((prev) => prev - deletedItem.quantity);
+
     const guestId = getGuestId();
     await fetch(`http://localhost:4000/cart/delete`, {
       method: "DELETE",

@@ -1,9 +1,10 @@
 import { getGuestId } from "@/lib/guestId";
+import useCartStore from "@/store/cartStore";
 import React from "react";
 import { toast } from "sonner";
 
 const AddToCartButton = ({ selectedSize, product }) => {
-  console.log(product);
+  const { incrementCart } = useCartStore();
   const handleAddToBag = async () => {
     // validating the size
     if (!selectedSize) {
@@ -48,6 +49,7 @@ const AddToCartButton = ({ selectedSize, product }) => {
     });
     if (res.ok) {
       toast.success("added to bag!");
+      incrementCart();
     } else {
       toast.error("Something went wrong");
     }
