@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Truck, Zap, Clock } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { getGuestId } from "@/lib/guestId";
+import { useRouter } from "next/navigation";
 
 const deliveryOptions = [
   {
@@ -33,6 +34,7 @@ const inputCls =
   "w-full h-11 px-4 bg-accent border-0 rounded-xl font-body text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-foreground/20 transition-all";
 
 export default function CheckoutDetailsClient() {
+  const router = useRouter();
   // ── Delivery method state
   const [selectedDelivery, setSelectedDelivery] = useState("standard");
 
@@ -90,10 +92,20 @@ export default function CheckoutDetailsClient() {
   const actualDeliveryCharge = isFreeDelivery ? 0 : deliveryCharge;
   const total = subtotal + actualDeliveryCharge;
   // ── Handle form submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    const guestId = userId ? null : getGuestId();
     e.preventDefault();
 
     // ── Get form data from e.currentTarget
+    // const form = e.currentTarget;
+    // const name = form.elements["name"].value;
+    // const email = form.elements["email"].value;
+    // const phone = form.elements["phone"].value;
+    // const address1 = form.elements["address1"].value;
+    // const address2 = form.elements["address2"].value;
+    // const city = form.elements["city"].value;
+    // const postcode = form.elements["postcode"].value;
+
     const form = e.currentTarget;
     const name = form.elements["name"].value;
     const email = form.elements["email"].value;
@@ -121,11 +133,19 @@ export default function CheckoutDetailsClient() {
       deliveryCharge: actualDeliveryCharge,
       subtotal,
       total,
-      status: "pending",
     };
-
-    console.log("orderData:", orderData);
-    // TODO: POST to /order endpoint
+    const res = await fetch(`http://localhost:4000/order`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(orderData),
+    });
+    const data = await res.json();
+    console.log("orderID:", data.orderId);
+    if (res.ok) {
+      router.push(`/order-confirmation/${data.orderId}`);
+    }
   };
 
   return (
