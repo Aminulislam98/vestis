@@ -41,7 +41,7 @@ export default function ProductDetailPageClient({ product }) {
           >
             £{product.price.toFixed(2)}
           </span>
-          <span className="font-body text-sm font-semibold text-green-600 dark:text-green-400">
+          <span className="font-body text-base font-semibold text-green-600 dark:text-green-400">
             {Math.round(
               ((product.price - product.salePrice) / product.price) * 100,
             )}
@@ -51,7 +51,7 @@ export default function ProductDetailPageClient({ product }) {
       ) : (
         <span
           className="font-price font-bold text-foreground"
-          style={{ fontSize: "clamp(1.3rem, 2vw, 1.6rem)" }}
+          style={{ fontSize: "clamp(1.3rem, 1.5vw, 1.6rem)" }}
         >
           £{product.price.toFixed(2)}
         </span>
@@ -78,14 +78,10 @@ export default function ProductDetailPageClient({ product }) {
           <ProductGallery images={product.images} />
 
           {/* ── MOBILE ONLY: details under photo */}
-          <div className="lg:hidden px-4 pt-5 pb-2 flex flex-col gap-2">
-            <p className="font-body font-semibold text-foreground text-xs uppercase tracking-widest">
-              {product.brand}
-            </p>
-            <h1 className="font-semibold text-xl leading-tight text-foreground">
-              {product.name}
-            </h1>
-            <p className="font-body text-muted-foreground capitalize text-sm">
+          <div className="lg:hidden px-4 pt-3 pb-2 flex flex-col">
+            <p className=" font-semibold text-base ">{product.brand}</p>
+            <h1 className="font-semibold text-[19px]">{product.name}</h1>
+            <p className="capitalize text-gray-600 text-base">
               {product.gender}'s {product.category}
             </p>
             <div className="mt-1">
@@ -97,13 +93,11 @@ export default function ProductDetailPageClient({ product }) {
         {/* ── RIGHT — Details */}
         <div className="w-full lg:w-[50%] flex flex-col gap-4 px-4 sm:px-8 lg:px-12  ">
           {/* ── Desktop: Brand, Name, Price */}
-          <div className="hidden lg:flex flex-col gap-2">
-            <p className="font-body font-semibold text-foreground text-xs uppercase tracking-widest">
-              {product.brand}
-            </p>
+          <div className="hidden lg:flex flex-col ">
+            <p className="text-base  font-semibold">{product.brand}</p>
             <h1
               className="font-semibold leading-tight"
-              style={{ fontSize: "clamp(1.4rem, 2vw, 2rem)" }}
+              style={{ fontSize: "clamp(1rem, 1.3vw, 1.4rem)" }}
             >
               {product.name}
             </h1>
@@ -113,7 +107,7 @@ export default function ProductDetailPageClient({ product }) {
             >
               {product.gender}'s {product.category}
             </p>
-            <div className="mt-2">
+            <div className="mt-1">
               <PriceBlock />
             </div>
           </div>

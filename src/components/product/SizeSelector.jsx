@@ -36,7 +36,7 @@ export default function SizeSelector({ variants, selectedSize, onSelect }) {
               onClick={() => !outOfStock && onSelect(size)}
               disabled={outOfStock}
               className={`
-                relative w-14 h-12 border font-body text-sm
+                relative w-14 h-12 border  text-base
                 transition-all duration-200
                 ${
                   outOfStock

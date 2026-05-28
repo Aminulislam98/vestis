@@ -107,7 +107,9 @@ export default function BagPageClient() {
       ),
     );
 
-    setCartCount((prev) => prev - deletedItem.quantity);
+    for (let i = 0; i < deletedItem.quantity; i++) {
+      decrementCart();
+    }
 
     const userId = session?.user?.id || null;
     const guestId = userId ? null : getGuestId();
@@ -351,9 +353,12 @@ export default function BagPageClient() {
             </div>
 
             {/* ── CHECKOUT BUTTON */}
-            <button className="w-full py-4 bg-foreground text-background font-body font-semibold text-base hover:opacity-80 transition-opacity mt-5">
+            <Link
+              href={"/checkout"}
+              className="w-full py-4 bg-foreground text-background font-body font-semibold text-base hover:opacity-80 transition-opacity mt-5"
+            >
               Checkout
-            </button>
+            </Link>
 
             {/* ── TERMS */}
             <p className="font-body text-sm text-muted-foreground mt-4 leading-relaxed">

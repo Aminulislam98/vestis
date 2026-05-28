@@ -21,7 +21,7 @@ export default function ProductGallery({ images }) {
           spaceBetween={0}
           modules={[FreeMode]}
           style={{ height: "100%" }}
-          className="w-full h-full"
+          className="w-full h-full sm:rounded-2xl"
         >
           {images.map((img, index) => (
             <SwiperSlide key={index} style={{ height: "100%" }}>
@@ -31,7 +31,7 @@ export default function ProductGallery({ images }) {
                   alt={img.alt}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover object-top"
+                  className="object-cover object-top sm:rounded-2xl"
                   quality={95}
                   priority={index === 0}
                 />

@@ -60,7 +60,7 @@ export default function Navbar() {
   const [visible, setVisible] = useState(true);
   const [lastY, setLastY] = useState(0);
 
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -91,7 +91,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const fetchCount = async () => {
-      if (session === undefined) return;
+      if (isPending) return;
       let url;
       if (session?.user.id) {
         url = `http://localhost:4000/cart?userId=${session?.user?.id}`;
