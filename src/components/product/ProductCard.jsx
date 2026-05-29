@@ -1,13 +1,17 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 const ProductCard = ({ product }) => {
-  console.log("this is one product:", product);
   // ── Price display logic
   // isOnSale=true + salePrice present → red sale price + grey strikethrough original
   // Otherwise                         → single bold black price
   const isOnSale = product.isOnSale && product.salePrice != null;
+  const [hovered, setHovered] = useState(false);
+  const hasSecondImage = product.images && product.images[1];
+  const currentImage =
+    hovered && hasSecondImage ? product.images[1].url : product.images[0].url;
 
   return (
     <Link href={`/products/${product.slug}`} className="group block">
@@ -16,13 +20,17 @@ const ProductCard = ({ product }) => {
           - bg-[#f6f6f6] light grey matches Nike/Zara product photo backgrounds
           - object-center keeps the clothing centred in the frame
           - group-hover:scale-105 → subtle zoom on card hover */}
-      <div className="relative overflow-hidden w-full bg-[#f6f6f6] aspect-3/4 max-h-100 md:max-h-105 2xl:max-h-150">
+      <div
+        className="relative overflow-hidden w-full bg-[#f6f6f6] aspect-3/4 max-h-100 md:max-h-105 2xl:max-h-150"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
         <Image
-          src={product.images[0].url}
+          src={currentImage}
           alt={product.name}
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-          className="object-cover object-center transition-transform duration-500 sm:group-hover:scale-105"
+          className="object-cover object-center transition-transform duration-500 sm:group-hover:scale-105 rounded"
           quality={90}
           priority
         />
@@ -40,7 +48,7 @@ const ProductCard = ({ product }) => {
 
         {/* Product name — acts as the subtitle / descriptor line in grey
             e.g. "Men's Graphic T-Shirt" */}
-        <p className="font-body text-[17px] text-muted-foreground mt-0.5 leading-snug">
+        <p className="font-medium text-base text-gray-600 mt-0.5 leading-snug">
           {product.name}
         </p>
 

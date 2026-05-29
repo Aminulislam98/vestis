@@ -131,7 +131,7 @@ export default function ProductsPageClient({ products, gender }) {
       {/* ── TOP BAR
           MUST be outside the flex row (sidebar + grid)
           sticky top-0 — sticks right below navbar which is also sticky top-0 */}
-      <div className="sticky top-0 z-30 w-full px-4 md:px-8 lg:px-12 py-3 bg-background border-b border-border flex items-center justify-between">
+      <div className="sticky top-0 z-30 w-full px-4 md:px-8 lg:px-12 py-3 bg-background flex items-center justify-between">
         {/* Filter toggle */}
         <button
           onClick={() => {

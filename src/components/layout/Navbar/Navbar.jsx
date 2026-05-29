@@ -141,7 +141,7 @@ export default function Navbar() {
           ${visible ? "translate-y-0" : "-translate-y-full"}
         `}
       >
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
+        <div className="max-w-[1900px] w-full mx-auto px-4 md:px-8 lg:px-12">
           <div className="flex items-center h-14 relative">
             {/* ── LEFT — Hamburger + Logo */}
             <div className="flex items-center gap-2 flex-1">
@@ -167,7 +167,7 @@ export default function Navbar() {
                   key={link.label}
                   href={link.href}
                   className={`
-                    relative font-body text-sm font-semibold tracking-widest uppercase
+                    relative font-body text-base font-semibold 
                     transition-colors duration-200 py-1 group
                     ${isActive(link.href) ? "text-foreground" : "text-foreground hover:opacity-60"}
                   `}

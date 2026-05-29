@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 const ProductCard = ({ product }) => {
   const isOnSale = product.originalPrice !== null;
@@ -10,7 +9,7 @@ const ProductCard = ({ product }) => {
       {/* Image */}
       <div className="relative overflow-hidden aspect-[3/4] bg-muted">
         <Image
-          src={product.image}
+          src={currentImage}
           alt={product.name}
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
