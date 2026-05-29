@@ -200,7 +200,7 @@ export default function Navbar() {
 
               {/* ── Account */}
               <Link
-                href={"/signup"}
+                href={"/account"}
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Account"
               >
@@ -316,7 +316,7 @@ export default function Navbar() {
             {/* ── Bottom links */}
             <div className="px-6 pb-10 pt-6 flex flex-col gap-4 border-t border-border shrink-0">
               <Link
-                href="#"
+                href="/account"
                 className="font-body text-base font-semibold"
                 onClick={() => setMobileMenuOpen(false)}
               >

@@ -55,6 +55,11 @@ export default function SignupPage() {
     }
   };
 
+  const handleSignUpGoogle = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google",
+    });
+  };
   // Original component classes preserved exactly
   const inputCls =
     "h-11 px-4 rounded-xl bg-accent border-0 text-foreground placeholder:text-muted-foreground font-body text-base focus-visible:ring-2 focus-visible:ring-foreground/20 focus-visible:bg-accent transition-all";
@@ -226,6 +231,7 @@ export default function SignupPage() {
 
           {/* Google */}
           <button
+            onClick={handleSignUpGoogle}
             type="button"
             className="
               w-full h-11 rounded-xl

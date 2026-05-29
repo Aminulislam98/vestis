@@ -7,12 +7,10 @@ export default async function CheckoutPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  //   console.log(object);
-
   // ── Already logged in → skip options
-  //   if (session?.user) {
-  //     redirect("/checkout/details");
-  //   }
+  if (session?.user) {
+    redirect("/checkout/details");
+  }
 
   // ── Not logged in → show options
   return <CheckoutOptionsClient />;
