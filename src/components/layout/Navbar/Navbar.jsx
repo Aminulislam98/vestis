@@ -215,7 +215,7 @@ export default function Navbar() {
 
               {/* ── Account — logged in → /account, not logged in → /signin */}
               <Link
-                href={session?.user ? "/account" : "/signin"}
+                href={"/account"}
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Account"
               >
