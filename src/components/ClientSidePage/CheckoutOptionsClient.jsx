@@ -8,6 +8,7 @@ import {
   User,
   UserCheck,
 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 export default function CheckoutOptionsClient() {
   return (
@@ -88,13 +89,13 @@ export default function CheckoutOptionsClient() {
             {/* ── Buttons */}
             <div className="flex flex-col gap-3 mt-2">
               <Link
-                href="/signin?callbackUrl=/checkout/details"
+                href={`/signin?callbackUrl=${encodeURIComponent("/checkout/details")}`}
                 className="w-full py-3.5 bg-background text-foreground font-body font-semibold text-base hover:opacity-80 transition-opacity text-center rounded-full"
               >
                 Sign In
               </Link>
               <Link
-                href="/signup?callbackUrl=/checkout/details"
+                href={`/signup?callbackUrl=${encodeURIComponent("/checkout/details")}`}
                 className="w-full py-3.5 bg-background/20 text-background font-body font-semibold text-base hover:bg-background/30 transition-colors text-center rounded-full"
               >
                 Create Account

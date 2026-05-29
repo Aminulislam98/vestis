@@ -59,9 +59,9 @@ export default function Navbar() {
   const { cartCount, setCartCount } = useCartStore();
   const [visible, setVisible] = useState(true);
   const [lastY, setLastY] = useState(0);
-
   const { data: session, isPending } = authClient.useSession();
 
+  // ── Hide navbar on scroll down
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY;
@@ -74,6 +74,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastY]);
 
+  // ── Active link check
   const isActive = (href) => {
     if (href === "/kids") return pathname === "/kids";
     if (href.includes("womens")) {
@@ -89,36 +90,46 @@ export default function Navbar() {
     return false;
   };
 
+  // ── Fetch cart count on session change
   useEffect(() => {
     const fetchCount = async () => {
       if (isPending) return;
       let url;
-      if (session?.user.id) {
-        url = `http://localhost:4000/cart?userId=${session?.user?.id}`;
+      if (session?.user?.id) {
+        url = `http://localhost:4000/cart?userId=${session.user.id}`;
       } else {
         const guestId = getGuestId();
         url = `http://localhost:4000/cart?guestId=${guestId}`;
-        console.log("fetching count...");
-        console.log("session:", session?.user?.id);
       }
       const res = await fetch(url);
       const data = await res.json();
-      console.log("fetched data:", data);
-      console.log("items:", data.items);
-
       if (data.items && data.items.length > 0) {
         const totalQuantity = data.items.reduce(
           (acc, item) => acc + (item.quantity || 0),
           0,
         );
-
         setCartCount(totalQuantity);
       } else {
         setCartCount(0);
       }
     };
     fetchCount();
-  }, [session?.user?.id]);
+  }, [isPending, session?.user?.id]);
+
+  // ── Merge guest cart on Google login
+  useEffect(() => {
+    if (isPending) return;
+    if (!session?.user?.id) return;
+    const guestId = localStorage.getItem("vestis-guest-id");
+    if (!guestId) return;
+    fetch("http://localhost:4000/cart/merge", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ guestId, userId: session.user.id }),
+    }).then(() => {
+      localStorage.removeItem("vestis-guest-id");
+    });
+  }, [isPending, session?.user?.id]);
 
   return (
     <>
@@ -156,9 +167,9 @@ export default function Navbar() {
                   key={link.label}
                   href={link.href}
                   className={`
-                    relative font-body text-sm font-semibold tracking-widest text-black uppercase
+                    relative font-body text-sm font-semibold tracking-widest uppercase
                     transition-colors duration-200 py-1 group
-                    ${isActive(link.href) ? "text-foreground" : "text-black hover:text-foreground"}
+                    ${isActive(link.href) ? "text-foreground" : "text-foreground hover:opacity-60"}
                   `}
                 >
                   {link.label}
@@ -183,8 +194,12 @@ export default function Navbar() {
                   hover:bg-accent/80 transition-colors duration-200 border"
                 aria-label="Open search"
               >
-                <Search size={20} strokeWidth={1.5} className="text-black" />
-                <span className="font-body text-sm font-semibold">
+                <Search
+                  size={18}
+                  strokeWidth={1.75}
+                  className="text-foreground"
+                />
+                <span className="font-body text-sm font-semibold text-foreground">
                   Search...
                 </span>
               </button>
@@ -198,9 +213,9 @@ export default function Navbar() {
                 <Search size={20} strokeWidth={2} />
               </button>
 
-              {/* ── Account */}
+              {/* ── Account — logged in → /account, not logged in → /signin */}
               <Link
-                href={"/account"}
+                href={session?.user ? "/account" : "/signin"}
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Account"
               >
@@ -217,13 +232,13 @@ export default function Navbar() {
 
               {/* ── Bag — with count badge */}
               <Link
-                href={"/bag"}
+                href="/bag"
                 className="relative p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Bag"
               >
                 <ShoppingBag size={20} strokeWidth={2} />
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-foreground text-background text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
                     {cartCount > 99 ? "99+" : cartCount}
                   </span>
                 )}
@@ -272,7 +287,7 @@ export default function Navbar() {
                     className="w-full flex items-center justify-between py-1"
                   >
                     <span
-                      className="text-left font-semibold text-foreground transition-colors duration-200"
+                      className="text-left font-semibold text-foreground"
                       style={{ fontSize: "clamp(1.2rem, 5vw, 2rem)" }}
                     >
                       {link.label}
@@ -293,7 +308,7 @@ export default function Navbar() {
                         <Link
                           href={link.href}
                           onClick={() => setMobileMenuOpen(false)}
-                          className="font-body text-xl font-semibold text-foreground py-2.5 border-b border-border/20 transition-colors hover:text-muted-foreground"
+                          className="font-body text-xl font-semibold text-foreground py-2.5 border-b border-border/20 hover:text-muted-foreground transition-colors"
                         >
                           View All {link.label}
                         </Link>
@@ -302,7 +317,7 @@ export default function Navbar() {
                             key={sub.value}
                             href={`${link.href}&subcategory=${sub.value}`}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="font-body text-xl text-muted-foreground hover:text-foreground py-2.5 border-b border-border/20 transition-colors duration-150 last:border-0"
+                            className="font-body text-xl text-muted-foreground hover:text-foreground py-2.5 border-b border-border/20 transition-colors last:border-0"
                           >
                             {sub.label}
                           </Link>
@@ -313,25 +328,49 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* ── Bottom links */}
+            {/* ── Bottom links — conditional on session */}
             <div className="px-6 pb-10 pt-6 flex flex-col gap-4 border-t border-border shrink-0">
+              {session?.user ? (
+                // ── Logged in
+                <Link
+                  href="/account"
+                  className="font-body text-base font-semibold text-foreground"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  My Account
+                </Link>
+              ) : (
+                // ── Not logged in
+                <>
+                  <Link
+                    href="/signin"
+                    className="font-body text-base font-semibold text-foreground"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="font-body text-base font-semibold text-foreground"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Create Account
+                  </Link>
+                </>
+              )}
+
+              {/* ── Track Order — always visible */}
               <Link
-                href="/account"
-                className="font-body text-base font-semibold"
+                href="/track-order"
+                className="font-body text-base font-semibold text-foreground"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                My Account
+                Track Order
               </Link>
+
               <Link
                 href="#"
-                className="font-body text-base font-semibold"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Wishlist
-              </Link>
-              <Link
-                href="#"
-                className="font-body text-base font-semibold"
+                className="font-body text-base font-semibold text-foreground"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Help & FAQs
