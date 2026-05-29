@@ -102,7 +102,7 @@ function SidebarContent({
 }
 
 export default function ProductsPageClient({ products, gender }) {
-  const [filtersVisible, setFiltersVisible] = useState(true);
+  const [filtersVisible, setFiltersVisible] = useState(false);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [activeSort, setActiveSort] = useState("Featured");
@@ -187,7 +187,7 @@ export default function ProductsPageClient({ products, gender }) {
 
       {/* ── MAIN CONTENT — sidebar + grid side by side
           topbar এর নিচে, flex row */}
-      <div className="w-full sm:px-4 md:px-8 lg:px-12 flex gap-8 min-h-screen">
+      <div className="w-full sm:px-4 flex gap-8 min-h-screen">
         {/* ── DESKTOP SIDEBAR */}
         {filtersVisible && (
           <aside className="hidden xl:block w-56 shrink-0">
