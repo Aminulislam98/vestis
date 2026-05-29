@@ -8,6 +8,8 @@ import AddToCartButton from "../actionsButtons/AddToCartButton";
 import { saveViewedProduct } from "@/lib/viewedProducts";
 import Image from "next/image";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
+import { getGuestId } from "@/lib/guestId";
 
 export default function ProductDetailPageClient({ product }) {
   const [selectedSize, setSelectedSize] = useState(null);
@@ -15,6 +17,45 @@ export default function ProductDetailPageClient({ product }) {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const actionButtonsRef = useRef(null);
   const isOnSale = product.isOnSale && product.salePrice;
+  const { data: session, isPending } = authClient.useSession();
+  const [guestId, setGuestId] = useState(null);
+  const userId = session?.user?.id;
+
+  useEffect(() => {
+    const checkUserId = () => {
+      if (isPending) return;
+      if (!userId) {
+        setGuestId(getGuestId());
+      }
+    };
+    checkUserId();
+  }, [product._id]);
+
+  const handleFavorite = async () => {
+    if (isPending) return;
+    const guestId = userId ? null : guestId;
+    console.log("this is guestId:", guestId);
+    console.log("this is userId:", userId);
+
+    const res = await fetch("http://localhost:4000/wishlist/add", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: userId || null,
+        guestId: userId ? null : guestId,
+        productId: product._id,
+        name: product.name,
+        price: product.price,
+        brand: product.brand,
+        slug: product.slug,
+        image: product.images[0].url,
+      }),
+    });
+    const data = await res.json();
+    console.log("data:", data);
+  };
 
   // ── Save to viewed history
   useEffect(() => {
@@ -88,7 +129,10 @@ export default function ProductDetailPageClient({ product }) {
   const ActionButtons = () => (
     <div className="flex flex-col gap-3">
       <AddToCartButton selectedSize={selectedSize} product={product} />
-      <button className="w-full py-4 border border-foreground text-foreground font-body font-semibold text-base hover:bg-accent transition-colors flex items-center justify-center gap-2 rounded-full">
+      <button
+        onClick={handleFavorite}
+        className="w-full py-4 border border-foreground text-foreground font-body font-semibold text-base hover:bg-accent transition-colors flex items-center justify-center gap-2 rounded-full"
+      >
         <Heart size={18} strokeWidth={1.75} />
         Favourite
       </button>

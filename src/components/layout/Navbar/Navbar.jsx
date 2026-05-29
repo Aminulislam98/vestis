@@ -223,12 +223,13 @@ export default function Navbar() {
               </Link>
 
               {/* ── Wishlist */}
-              <button
+              <Link
+                href={"/wishlist"}
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Wishlist"
               >
                 <Heart size={20} strokeWidth={2} />
-              </button>
+              </Link>
 
               {/* ── Bag — with count badge */}
               <Link
