@@ -141,7 +141,7 @@ export default function Navbar() {
           ${visible ? "translate-y-0" : "-translate-y-full"}
         `}
       >
-        <div className="max-w-[1900px] w-full mx-auto px-4 md:px-8 lg:px-12">
+        <div className="max-w-[1900px] w-full mx-auto px-4  ">
           <div className="flex items-center h-14 relative">
             {/* ── LEFT — Hamburger + Logo */}
             <div className="flex items-center gap-2 flex-1">
@@ -150,11 +150,11 @@ export default function Navbar() {
                 aria-label="Open menu"
                 onClick={() => setMobileMenuOpen(true)}
               >
-                <Menu size={20} strokeWidth={2} />
+                <Menu size={22} strokeWidth={2} />
               </button>
               <Link
                 href="/"
-                className="font-heading text-xl tracking-[0.25em] uppercase text-foreground"
+                className=" font-semibold text-2xl flex items-center justify-center "
               >
                 Vestis
               </Link>

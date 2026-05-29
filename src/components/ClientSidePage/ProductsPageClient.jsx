@@ -131,7 +131,7 @@ export default function ProductsPageClient({ products, gender }) {
       {/* ── TOP BAR
           MUST be outside the flex row (sidebar + grid)
           sticky top-0 — sticks right below navbar which is also sticky top-0 */}
-      <div className="sticky top-0 z-30 w-full px-4 md:px-8 lg:px-12 py-3 bg-background flex items-center justify-between">
+      <div className="sticky top-0 z-30 w-full px-4  py-3 bg-background flex items-center justify-between">
         {/* Filter toggle */}
         <button
           onClick={() => {
@@ -255,10 +255,10 @@ export default function ProductsPageClient({ products, gender }) {
             </div>
           ) : (
             <div
-              className={`grid grid-cols-2 gap-2 sm:gap-x-4 gap-y-8 ${
+              className={`grid grid-cols-2 gap-2 sm:gap-x-4 gap-y-8  ${
                 filtersVisible
                   ? "lg:grid-cols-3 xl:grid-cols-3"
-                  : "lg:grid-cols-4 xl:grid-cols-4"
+                  : "md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4"
               }`}
             >
               {products.map((product) => (
