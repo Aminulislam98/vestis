@@ -211,7 +211,7 @@ export default function Navbar() {
                 className="lg:hidden p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Search"
               >
-                <Search size={20} strokeWidth={2} />
+                <Search size={22} strokeWidth={2} />
               </button>
 
               {/* ── Account — logged in → /account, not logged in → /signin */}
@@ -220,7 +220,7 @@ export default function Navbar() {
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Account"
               >
-                <User size={20} strokeWidth={2} />
+                <User size={22} strokeWidth={2} />
               </Link>
 
               {/* ── Wishlist */}
@@ -229,7 +229,7 @@ export default function Navbar() {
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Wishlist"
               >
-                <Heart size={20} strokeWidth={2} />
+                <Heart size={22} strokeWidth={2} />
               </Link>
 
               {/* ── Bag — with count badge */}
@@ -238,7 +238,7 @@ export default function Navbar() {
                 className="relative p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
                 aria-label="Bag"
               >
-                <ShoppingBag size={20} strokeWidth={2} />
+                <ShoppingBag size={22} strokeWidth={2} />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 w-5 h-5 bg-foreground text-background text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
                     {cartCount > 99 ? "99+" : cartCount}

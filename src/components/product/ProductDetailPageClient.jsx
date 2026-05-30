@@ -11,6 +11,7 @@ import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { getGuestId } from "@/lib/guestId";
 import { toast } from "sonner";
+import PriceBlockPage from "./PriceBlock";
 
 export default function ProductDetailPageClient({ product }) {
   const [selectedSize, setSelectedSize] = useState(null);
@@ -134,7 +135,7 @@ export default function ProductDetailPageClient({ product }) {
           </span>
         </>
       ) : (
-        <span className="font-price font-bold text-foreground text-xl">
+        <span className="font-price font-bold text-foreground md:text-xl">
           £{product.price.toFixed(2)}
         </span>
       )}
@@ -165,16 +166,15 @@ export default function ProductDetailPageClient({ product }) {
             <ProductGallery images={product.images} />
 
             {/* ── Mobile only — details under image */}
-            <div className="lg:hidden  py-2 flex flex-col gap-1 px-3">
-              <p className="font-semibold text-base">{product.brand}</p>
-              <h1 className="font-body font-bold text-xl text-foreground leading-tight">
+            <div className="lg:hidden  py-2 flex flex-col  px-3">
+              <h1 className="font-semibold text-xl tracking-tighter">
                 {product.name}
               </h1>
-              <p className="font-body text-base text-muted-foreground capitalize">
+              <p className="font-normal text-gray-600 text-[17px]  capitalize">
                 {product.gender}'s {product.category}
               </p>
               <div className="mt-2">
-                <PriceBlock />
+                <PriceBlockPage isOnSale={isOnSale} product={product} />
               </div>
             </div>
           </div>
@@ -215,7 +215,7 @@ export default function ProductDetailPageClient({ product }) {
       <div>
         {/* ── YOU MAY ALSO LIKE */}
         {relatedProducts.length > 0 && (
-          <div className=" py-7 sm:py-12 sm:px-3  w-full mx-auto px-4 md:px-8 lg:px-12">
+          <div className=" py-7 sm:py-12 sm:px-3  w-full mx-auto sm:px-4 md:px-8 lg:px-12">
             {/* ── Section header */}
             <h2 className="font-body font-bold text-2xl text-foreground mb-8 px-3 sm:px-0">
               You May Also Like
@@ -247,8 +247,7 @@ export default function ProductDetailPageClient({ product }) {
 
                     {/* ── Details */}
                     <div className="flex flex-col gap-0.5 px-2 sm:px-0">
-                      <p className="font-semibold text-base">{item.brand}</p>
-                      <p className="font-body font-semibold text-base text-foreground leading-snug">
+                      <p className="font-body font-semibold text-base text-foreground leading-snug line-clamp-1">
                         {item.name}
                       </p>
                       <div className="flex items-center gap-2 mt-0.5">

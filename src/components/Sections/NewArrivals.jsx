@@ -66,11 +66,11 @@ export default function NewArrivals() {
               </div>
 
               {/* ── Details */}
-              <div className="flex flex-col gap-0.5 sm:px-1 px-3 ">
-                <p className="font-body text-sm text-muted-foreground uppercase tracking-widest">
+              <div className="flex flex-col  sm:px-1 px-3 ">
+                <p className="text-sm font-semibold md:text-base">
                   {item.brand}
                 </p>
-                <p className="font-body font-semibold text-base text-foreground leading-snug line-clamp-1">
+                <p className="font-semibold text-sm md:text-base line-clamp-1">
                   {item.name}
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">
