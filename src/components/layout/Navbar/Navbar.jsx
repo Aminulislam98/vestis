@@ -122,7 +122,7 @@ export default function Navbar() {
     if (!session?.user?.id) return;
     const guestId = localStorage.getItem("vestis-guest-id");
     if (!guestId) return;
-    fetch("${process.env.NEXT_PUBLIC_SERVER_URL}/cart/merge", {
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/cart/merge", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ guestId, userId: session.user.id }),

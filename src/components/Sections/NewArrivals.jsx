@@ -9,7 +9,7 @@ export default function NewArrivals() {
   // ── Fetch newest 8 products
   useEffect(() => {
     const fetchNewArrivals = async () => {
-      const res = await fetch("${process.env.NEXT_PUBLIC_SERVER_URL}/products?limit=8");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/products?limit=8");
       const data = await res.json();
       setProducts(data.data || []);
     };

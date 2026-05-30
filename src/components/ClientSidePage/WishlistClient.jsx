@@ -49,7 +49,7 @@ export default function WishlistClient({ user }) {
   const handleRemove = async (productId) => {
     setItems(items.filter((i) => i.productId !== productId));
 
-    await fetch("${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist/remove", {
+    await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist/remove", {
       method: "DELETE",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -62,7 +62,7 @@ export default function WishlistClient({ user }) {
 
   // ── Add to bag
   const handleAddToBag = async (item) => {
-    await fetch("${process.env.NEXT_PUBLIC_SERVER_URL}/cart/add", {
+    await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/cart/add", {
       method: "POST",
 
       headers: { "content-type": "application/json" },
