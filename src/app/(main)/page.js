@@ -22,12 +22,12 @@ export const metadata = {
     title: "Vestis | Premium Fashion Store",
     description:
       "Shop the latest men's and women's fashion at Vestis. Free UK delivery on orders over £50.",
-    url: "https://vestis.co.uk",
+    url: "https://vestis-psi.vercel.app",
     siteName: "Vestis",
     type: "website",
     images: [
       {
-        url: "https://vestis.co.uk/og-image.jpg",
+        url: "https://vestis-psi.vercel.app/opengraph-image",
         width: 1200,
         height: 630,
         alt: "Vestis Fashion Store",
@@ -38,14 +38,14 @@ export const metadata = {
     card: "summary_large_image",
     title: "Vestis | Premium Fashion Store",
     description: "Shop the latest men's and women's fashion at Vestis.",
-    images: ["https://vestis.co.uk/og-image.jpg"],
+    images: ["https://vestis-psi.vercel.app/opengraph-image"],
   },
   robots: {
     index: true,
     follow: true,
   },
   alternates: {
-    canonical: "https://vestis.co.uk",
+    canonical: "https://vestis-psi.vercel.app",
   },
 };
 
