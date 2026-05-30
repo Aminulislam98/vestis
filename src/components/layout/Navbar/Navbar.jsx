@@ -96,10 +96,10 @@ export default function Navbar() {
       if (isPending) return;
       let url;
       if (session?.user?.id) {
-        url = `http://localhost:4000/cart?userId=${session.user.id}`;
+        url = `${process.env.NEXT_PUBLIC_SERVER_URL}/cart?userId=${session.user.id}`;
       } else {
         const guestId = getGuestId();
-        url = `http://localhost:4000/cart?guestId=${guestId}`;
+        url = `${process.env.NEXT_PUBLIC_SERVER_URL}/cart?guestId=${guestId}`;
       }
       const res = await fetch(url);
       const data = await res.json();
@@ -122,7 +122,7 @@ export default function Navbar() {
     if (!session?.user?.id) return;
     const guestId = localStorage.getItem("vestis-guest-id");
     if (!guestId) return;
-    fetch("http://localhost:4000/cart/merge", {
+    fetch("${process.env.NEXT_PUBLIC_SERVER_URL}/cart/merge", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ guestId, userId: session.user.id }),

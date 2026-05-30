@@ -46,7 +46,7 @@ export default function SigninClient() {
       });
       const guestId = localStorage.getItem("vestis-guest-id");
       if (guestId && data.user?.id) {
-        await fetch("http://localhost:4000/cart/merge", {
+        await fetch("${process.env.NEXT_PUBLIC_SERVER_URL}/cart/merge", {
           method: "POST",
           headers: {
             "content-type": "application/json",

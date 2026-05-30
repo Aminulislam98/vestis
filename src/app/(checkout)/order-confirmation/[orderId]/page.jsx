@@ -19,7 +19,7 @@ const deliveryInfo = {
 
 export default async function OrderConfirmationPage({ params }) {
   const { orderId } = await params;
-  const res = await fetch(`http://localhost:4000/order/${orderId}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/order/${orderId}`);
   const data = await res.json();
   const order = data?.order;
 

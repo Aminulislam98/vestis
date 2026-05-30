@@ -56,9 +56,9 @@ export default function CheckoutDetailsClient() {
     const fetchCart = async () => {
       let url;
       if (userId) {
-        url = `http://localhost:4000/cart?userId=${userId}`;
+        url = `${process.env.NEXT_PUBLIC_SERVER_URL}/cart?userId=${userId}`;
       } else {
-        url = `http://localhost:4000/cart?guestId=${guestId}`;
+        url = `${process.env.NEXT_PUBLIC_SERVER_URL}/cart?guestId=${guestId}`;
       }
       const res = await fetch(url);
       const data = await res.json();
@@ -134,7 +134,7 @@ export default function CheckoutDetailsClient() {
       subtotal,
       total,
     };
-    const res = await fetch(`http://localhost:4000/order`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/order`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

@@ -4,37 +4,45 @@ import { headers } from "next/headers";
 
 const ProductDetailPage = async ({ params }) => {
   const { id } = await params;
-  console.log("SERVER URL:", process.env.NEXT_PUBLIC_SERVER_URL);
+
+  console.log("1. PAGE CALLED, id:", id);
 
   let product = null;
 
   try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    console.log("2. SESSION:", session ? "EXISTS" : "NULL");
+
     const tokenData = await auth.api.getToken({
       headers: await headers(),
     });
-    const payload = JSON.parse(
-      Buffer.from(tokenData.token.split(".")[1], "base64").toString(),
-    );
-    console.log("JWT PAYLOAD:", payload);
-    console.log("ISS:", payload.iss);
-    console.log("AUD:", payload.aud);
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/product/${id}`,
-      {
-        headers: {
-          authorization: `Bearer ${tokenData.token}`,
-        },
-        cache: "no-store",
+    console.log("3. TOKEN:", tokenData?.token ? "EXISTS" : "NULL");
+
+    const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/product/${id}`;
+    console.log("4. FETCHING URL:", url);
+
+    const res = await fetch(url, {
+      headers: {
+        authorization: `Bearer ${tokenData?.token}`,
       },
-    );
+      cache: "no-store",
+    });
+
+    console.log("5. RESPONSE STATUS:", res.status);
+
     if (!res.ok) {
-      console.error("fetch failed:", res.status, await res.text());
+      const text = await res.text();
+      console.log("6. ERROR RESPONSE:", text);
     } else {
       product = await res.json();
+      console.log("7. PRODUCT:", product ? product.name : "NULL");
     }
   } catch (err) {
-    console.error("ProductDetailPage error:", err);
+    console.error("ERROR:", err.message);
   }
 
   return (

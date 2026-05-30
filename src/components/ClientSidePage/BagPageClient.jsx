@@ -20,10 +20,10 @@ export default function BagPageClient() {
     const fetchCart = async () => {
       let url;
       if (session?.user?.id) {
-        url = `http://localhost:4000/cart?userId=${session?.user?.id}`;
+        url = `${process.env.NEXT_PUBLIC_SERVER_URL}/cart?userId=${session?.user?.id}`;
       } else {
         const guestId = getGuestId();
-        url = `http://localhost:4000/cart?guestId=${guestId}`;
+        url = `${process.env.NEXT_PUBLIC_SERVER_URL}/cart?guestId=${guestId}`;
       }
       const res = await fetch(url);
       const data = await res.json();
@@ -49,7 +49,7 @@ export default function BagPageClient() {
     const userId = session?.user?.id || null;
     const guestId = userId ? null : getGuestId();
 
-    fetch(`http://localhost:4000/cart/update`, {
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/cart/update`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -80,7 +80,7 @@ export default function BagPageClient() {
     decrementCart();
     const userId = session?.user?.id || null;
     const guestId = userId ? null : getGuestId();
-    await fetch(`http://localhost:4000/cart/update`, {
+    await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/cart/update`, {
       method: "PATCH",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -108,7 +108,7 @@ export default function BagPageClient() {
     }
     const userId = session?.user?.id || null;
     const guestId = userId ? null : getGuestId();
-    await fetch(`http://localhost:4000/cart/delete`, {
+    await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/cart/delete`, {
       method: "DELETE",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ guestId, userId, productId, size }),

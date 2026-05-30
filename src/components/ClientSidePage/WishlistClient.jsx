@@ -31,9 +31,9 @@ export default function WishlistClient({ user }) {
     const fetchWishlist = async () => {
       let url;
       if (userId) {
-        url = `http://localhost:4000/wishlist?userId=${userId}`;
+        url = `${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist?userId=${userId}`;
       } else if (guestId) {
-        url = `http://localhost:4000/wishlist?guestId=${guestId}`;
+        url = `${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist?guestId=${guestId}`;
       } else return;
 
       const res = await fetch(url);
@@ -49,7 +49,7 @@ export default function WishlistClient({ user }) {
   const handleRemove = async (productId) => {
     setItems(items.filter((i) => i.productId !== productId));
 
-    await fetch("http://localhost:4000/wishlist/remove", {
+    await fetch("${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist/remove", {
       method: "DELETE",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -62,7 +62,7 @@ export default function WishlistClient({ user }) {
 
   // ── Add to bag
   const handleAddToBag = async (item) => {
-    await fetch("http://localhost:4000/cart/add", {
+    await fetch("${process.env.NEXT_PUBLIC_SERVER_URL}/cart/add", {
       method: "POST",
 
       headers: { "content-type": "application/json" },

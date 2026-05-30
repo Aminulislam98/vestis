@@ -47,7 +47,7 @@ export default function TrackOrderPage() {
 
     // ── Fetch order from server
     const res = await fetch(
-      `http://localhost:4000/track-order?orderId=${orderId}&email=${email}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/track-order?orderId=${orderId}&email=${email}`,
     );
     const data = await res.json();
 

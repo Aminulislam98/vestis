@@ -32,7 +32,7 @@ const AddToCartButton = ({ selectedSize, product }) => {
     const userId = session?.user?.id || null;
     const guestId = userId ? null : getGuestId();
 
-    const res = await fetch(`http://localhost:4000/cart/add`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/cart/add`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({

@@ -40,7 +40,7 @@ export default function ProfilePageClient({ user }) {
   // ── Fetch user orders
   useEffect(() => {
     const fetchOrders = async () => {
-      const res = await fetch(`http://localhost:4000/orders?userId=${user.id}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/orders?userId=${user.id}`);
       const data = await res.json();
       setOrders(data.orders || []);
       setLoadingOrders(false);

@@ -38,7 +38,7 @@ export default function SearchModal({ open, onClose }) {
     const getResults = async () => {
       setLoading(true);
       const res = await fetch(
-        `http://localhost:4000/products?search=${debouncedSearch}&limit=8`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/products?search=${debouncedSearch}&limit=8`,
       );
       const data = await res.json();
       setResults(data.data);

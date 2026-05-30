@@ -28,10 +28,10 @@ export default function ProductDetailPageClient({ product }) {
     const checkWishList = async () => {
       let url;
       if (userId) {
-        url = `http://localhost:4000/wishlist?userId=${userId}`;
+        url = `${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist?userId=${userId}`;
       }
       if (guestId) {
-        url = `http://localhost:4000/wishlist?guestId=${guestId}`;
+        url = `${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist?guestId=${guestId}`;
       }
       const res = await fetch(url);
       const data = await res.json(res);
@@ -54,7 +54,7 @@ export default function ProductDetailPageClient({ product }) {
   const handleFavorite = async () => {
     if (isPending) return;
     setWishListed(!isWishListed);
-    const res = await fetch("http://localhost:4000/wishlist/add", {
+    const res = await fetch("${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist/add", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -97,7 +97,7 @@ export default function ProductDetailPageClient({ product }) {
   useEffect(() => {
     const fetchRelated = async () => {
       const res = await fetch(
-        `http://localhost:4000/products/related?gender=${product.gender}&category=${product.category}&exclude=${product._id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/products/related?gender=${product.gender}&category=${product.category}&exclude=${product._id}`,
       );
       const data = await res.json();
       setRelatedProducts(data.data || []);

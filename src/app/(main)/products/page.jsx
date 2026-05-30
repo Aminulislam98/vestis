@@ -15,7 +15,7 @@ const getProducts = async (
   if (subcategory) params.set("subcategory", subcategory);
   if (sort) params.set("sort", sort);
   const res = await fetch(
-    `http://localhost:4000/products?${params.toString()}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/products?${params.toString()}`,
   );
   const data = await res.json();
   return data.data ?? [];

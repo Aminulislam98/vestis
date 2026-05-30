@@ -188,7 +188,7 @@ export default function CreateProductForm() {
       };
 
       // ── TODO: change to production URL when deploying
-      const res = await fetch("http://localhost:4000/product", {
+      const res = await fetch("${process.env.NEXT_PUBLIC_SERVER_URL}/product", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(productPayload),
