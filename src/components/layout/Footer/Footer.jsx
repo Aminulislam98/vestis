@@ -18,26 +18,42 @@ const footerLinks = [
     heading: "Help",
     links: [
       { label: "Track Order", href: "/track-order" },
-      { label: "Delivery Info", href: "#" },
-      { label: "Returns", href: "#" },
-      { label: "FAQs", href: "#" },
+      { label: "Delivery Info", href: "/delivery" },
+      { label: "Returns", href: "/returns" },
+      { label: "FAQs", href: "/faqs" },
     ],
   },
   {
     heading: "Legal",
     links: [
-      { label: "Privacy Policy", href: "#" },
-      { label: "Terms of Service", href: "#" },
-      { label: "Cookie Policy", href: "#" },
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
+      { label: "Cookie Policy", href: "/cookies" },
     ],
   },
 ];
 
 const socialLinks = [
-  { icon: FaFacebook, label: "Facebook", href: "#" },
-  { icon: RiInstagramFill, label: "Instagram", href: "#" },
-  { icon: BsTwitterX, label: "Twitter", href: "#" },
-  { icon: FaYoutube, label: "YouTube", href: "#" },
+  {
+    icon: FaFacebook,
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=100093614353745",
+  },
+  {
+    icon: RiInstagramFill,
+    label: "Instagram",
+    href: "https://www.facebook.com/profile.php?id=100093614353745",
+  },
+  {
+    icon: BsTwitterX,
+    label: "Twitter",
+    href: "https://www.facebook.com/profile.php?id=100093614353745",
+  },
+  {
+    icon: FaYoutube,
+    label: "YouTube",
+    href: "https://www.facebook.com/profile.php?id=100093614353745",
+  },
 ];
 
 export default function Footer() {

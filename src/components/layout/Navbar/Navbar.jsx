@@ -43,11 +43,11 @@ const navLinks = [
       { label: "Tracksuits", value: "tracksuits" },
     ],
   },
-  {
-    label: "Kids",
-    href: "/kids",
-    subcategories: [],
-  },
+  // {
+  //   label: "Kids",
+  //   href: "/kids",
+  //   subcategories: [],
+  // },
 ];
 
 export default function Navbar() {
