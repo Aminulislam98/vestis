@@ -4,106 +4,108 @@ import { FaFacebook } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa6";
 import { RiInstagramFill } from "react-icons/ri";
 
+const footerLinks = [
+  {
+    heading: "Shop",
+    links: [
+      { label: "Men", href: "/products?gender=mens" },
+      { label: "Women", href: "/products?gender=womens" },
+      { label: "New Arrivals", href: "/products" },
+      { label: "Sale", href: "/products" },
+    ],
+  },
+  {
+    heading: "Help",
+    links: [
+      { label: "Track Order", href: "/track-order" },
+      { label: "Delivery Info", href: "#" },
+      { label: "Returns", href: "#" },
+      { label: "FAQs", href: "#" },
+    ],
+  },
+  {
+    heading: "Legal",
+    links: [
+      { label: "Privacy Policy", href: "#" },
+      { label: "Terms of Service", href: "#" },
+      { label: "Cookie Policy", href: "#" },
+    ],
+  },
+];
+
+const socialLinks = [
+  { icon: FaFacebook, label: "Facebook", href: "#" },
+  { icon: RiInstagramFill, label: "Instagram", href: "#" },
+  { icon: BsTwitterX, label: "Twitter", href: "#" },
+  { icon: FaYoutube, label: "YouTube", href: "#" },
+];
+
 export default function Footer() {
   return (
-    <footer className="w-full bg-background border-t border-border">
-      <div className="w-full px-6 sm:px-10 xl:px-16 py-14 flex flex-col gap-12">
-        {/* ── TOP — Brand + Links + Social */}
-        <div className="flex flex-col lg:flex-row items-start justify-between gap-10">
+    <footer className="w-full bg-[#f5f5f5] border-t border-border">
+      <div className="w-full px-6 sm:px-10 xl:px-16 py-16 flex flex-col gap-14">
+        {/* ── TOP */}
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-0 justify-between">
           {/* ── Brand */}
-          <p className="font-heading text-4xl tracking-[0.25em] uppercase text-foreground">
-            Vestis
-          </p>
-
-          {/* ── Links */}
-          <div className="flex flex-wrap gap-x-10 gap-y-4">
-            <Link
-              href="/products?gender=mens"
-              className="font-body text-base text-foreground hover:opacity-60 transition-opacity"
+          <div className="flex flex-col gap-4 lg:w-[280px]">
+            <p
+              className="text-4xl text-foreground"
+              style={{ fontFamily: "var(--font-signature)" }}
             >
-              Men
-            </Link>
-            <Link
-              href="/products?gender=womens"
-              className="font-body text-base text-foreground hover:opacity-60 transition-opacity"
-            >
-              Women
-            </Link>
-            <Link
-              href="/track-order"
-              className="font-body text-base text-foreground hover:opacity-60 transition-opacity"
-            >
-              Track Order
-            </Link>
-            <Link
-              href="/bag"
-              className="font-body text-base text-foreground hover:opacity-60 transition-opacity"
-            >
-              Bag
-            </Link>
-            <Link
-              href="/account"
-              className="font-body text-base text-foreground hover:opacity-60 transition-opacity"
-            >
-              Account
-            </Link>
+              Vestis
+            </p>
+            <p className="font-body text-base text-muted-foreground leading-relaxed max-w-xs">
+              Premium fashion for men and women. Style that means something.
+            </p>
+            <div className="flex items-center gap-5 mt-2">
+              {socialLinks.map(({ icon: Icon, label, href }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Icon size={18} />
+                </Link>
+              ))}
+            </div>
           </div>
 
-          {/* ── Social */}
-          <div className="flex items-center gap-5">
-            <Link
-              href="#"
-              aria-label="Facebook"
-              className="text-foreground hover:opacity-60 transition-opacity"
-            >
-              <FaFacebook size={20} />
-            </Link>
-            <Link
-              href="#"
-              aria-label="Instagram"
-              className="text-foreground hover:opacity-60 transition-opacity"
-            >
-              <RiInstagramFill size={20} />
-            </Link>
-            <Link
-              href="#"
-              aria-label="Twitter"
-              className="text-foreground hover:opacity-60 transition-opacity"
-            >
-              <BsTwitterX size={20} />
-            </Link>
-            <Link
-              href="#"
-              aria-label="YouTube"
-              className="text-foreground hover:opacity-60 transition-opacity"
-            >
-              <FaYoutube size={20} />
-            </Link>
+          {/* ── Columns */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-10">
+            {footerLinks.map((section) => (
+              <div key={section.heading} className="flex flex-col gap-4">
+                <p className="font-body font-semibold text-base text-foreground uppercase tracking-widest">
+                  {section.heading}
+                </p>
+                <ul className="flex flex-col gap-3">
+                  {section.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="font-body text-base text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* ── DIVIDER */}
         <div className="h-px bg-border" />
 
-        {/* ── BOTTOM — Copyright + Legal */}
+        {/* ── BOTTOM */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="font-body text-base text-foreground">
+          <p className="font-body text-base text-muted-foreground">
             © {new Date().getFullYear()} Vestis. All rights reserved.
           </p>
-          <div className="flex gap-6">
-            <Link
-              href="#"
-              className="font-body text-base text-foreground hover:opacity-60 transition-opacity"
-            >
-              Privacy Policy
-            </Link>
-            <Link
-              href="#"
-              className="font-body text-base text-foreground hover:opacity-60 transition-opacity"
-            >
-              Terms of Service
-            </Link>
-          </div>
+          <p className="font-body text-base text-muted-foreground">
+            Free UK Delivery over £50 · Free Returns
+          </p>
         </div>
       </div>
     </footer>

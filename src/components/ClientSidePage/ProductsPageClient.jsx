@@ -3,6 +3,7 @@ import { useState } from "react";
 import { SlidersHorizontal, ChevronDown, X } from "lucide-react";
 import ProductCard from "../product/ProductCard";
 import { useRouter, useSearchParams } from "next/navigation";
+import FadeUp from "../ui/FadeUp";
 
 const womenCategories = [
   { label: "Tops & T-Shirts", value: "tops" },
@@ -57,22 +58,6 @@ function SidebarContent({
           {`${gender}'s`}
         </p>
       )}
-      {/* {gender && (
-        <div className="w-full px-4 md:px-8 lg:px-12 pt-4">
-          <h1
-            className=" font-semibold"
-            style={{ fontSize: "clamp(1.5rem, 5vw, 1.7rem)" }}
-          >
-            {`${gender}`}
-            <span
-              className="font-body font-normal text-muted-foreground ml-3"
-              style={{ fontSize: "clamp(0.9rem, 1.5vw, 1rem)" }}
-            >
-              ({products.length})
-            </span>
-          </h1>
-        </div>
-      )} */}
 
       <ul className="flex flex-col">
         {categories.map((cat) => (
@@ -255,17 +240,16 @@ export default function ProductsPageClient({ products, gender }) {
             </div>
           ) : (
             <div
-              className={`grid grid-cols-2 gap-2 sm:gap-x-4 gap-y-8  ${
+              className={`grid grid-cols-2 gap-2 sm:gap-x-4 gap-y-8 ${
                 filtersVisible
                   ? "lg:grid-cols-3 xl:grid-cols-3"
                   : "md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4"
               }`}
             >
-              {products.map((product) => (
-                <ProductCard
-                  key={product._id ?? product.slug}
-                  product={product}
-                />
+              {products.map((product, index) => (
+                <FadeUp key={product._id ?? product.slug} delay={index * 0.01}>
+                  <ProductCard product={product} />
+                </FadeUp>
               ))}
             </div>
           )}

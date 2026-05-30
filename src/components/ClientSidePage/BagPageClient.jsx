@@ -116,9 +116,7 @@ export default function BagPageClient() {
   };
 
   // ── Wishlist placeholder
-  function handleWishlist(id) {
-    
-  }
+  function handleWishlist(id) {}
 
   // ── Calculate totals — only if items exist
   const subtotal =

@@ -3,59 +3,50 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-6 bg-background">
-      {/* Big 404 */}
-      <p
-        className="font-heading text-foreground/5 leading-none select-none"
-        style={{ fontSize: "clamp(8rem, 25vw, 22rem)" }}
-      >
-        404
-      </p>
-
-      {/* Content */}
-      <div className="text-center -mt-8 md:-mt-16">
-        <h1
-          className="font-heading text-foreground tracking-wide"
-          style={{ fontSize: "clamp(1.5rem, 4vw, 3.5rem)" }}
-        >
-          PAGE NOT FOUND
-        </h1>
+      {/* ── Content */}
+      <div className="text-center flex flex-col items-center gap-6 max-w-lg">
+        {/* ── Logo */}
         <p
-          className="font-body text-muted-foreground mt-4 max-w-md mx-auto"
-          style={{ fontSize: "clamp(0.875rem, 1.5vw, 1.1rem)" }}
+          className="text-3xl text-foreground"
+          style={{ fontFamily: "var(--font-signature)" }}
         >
-          The page you are looking for does not exist or has been moved. Let us
-          help you find what you need.
+          Vestis
         </p>
 
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
+        {/* ── Heading */}
+        <div className="flex flex-col gap-3">
+          <h1 className="font-body font-bold text-2xl text-foreground">
+            We can't find that page
+          </h1>
+          <p className="font-body text-base text-muted-foreground leading-relaxed">
+            The page you're looking for may have been moved or no longer exists.
+            Try heading back home or explore our latest collections.
+          </p>
+        </div>
+
+        {/* ── Divider */}
+
+        {/* ── Buttons */}
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
           <Link
             href="/"
-            className="font-body font-semibold text-sm tracking-widest uppercase px-10 py-4 bg-foreground text-background hover:opacity-80 transition-opacity duration-200"
+            className="w-full sm:w-auto px-8 py-3.5 bg-foreground text-background font-body font-semibold text-base hover:opacity-80 transition-opacity text-center rounded-full"
           >
             Back to Home
           </Link>
           <Link
-            href="/women"
-            className="font-body font-semibold text-sm tracking-widest uppercase px-10 py-4 border border-border text-foreground hover:bg-accent transition-colors duration-200"
+            href="/products?gender=womens"
+            className="w-full sm:w-auto px-8 py-3.5 border border-border text-foreground font-body font-semibold text-base hover:bg-accent transition-colors text-center rounded-full"
           >
             Shop Women
           </Link>
           <Link
-            href="/men"
-            className="font-body font-semibold text-sm tracking-widest uppercase px-10 py-4 border border-border text-foreground hover:bg-accent transition-colors duration-200"
+            href="/products?gender=mens"
+            className="w-full sm:w-auto px-8 py-3.5 border border-border text-foreground font-body font-semibold text-base hover:bg-accent transition-colors text-center rounded-full"
           >
             Shop Men
           </Link>
         </div>
-
-        {/* Logo at bottom */}
-        <p
-          className="font-heading text-muted-foreground/30 mt-16 tracking-[0.3em]"
-          style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }}
-        >
-          VESTIS
-        </p>
       </div>
     </main>
   );

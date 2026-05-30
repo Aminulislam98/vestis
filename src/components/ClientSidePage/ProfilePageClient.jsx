@@ -40,7 +40,9 @@ export default function ProfilePageClient({ user }) {
   // ── Fetch user orders
   useEffect(() => {
     const fetchOrders = async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/orders?userId=${user.id}`);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/orders?userId=${user.id}`,
+      );
       const data = await res.json();
       setOrders(data.orders || []);
       setLoadingOrders(false);
@@ -133,6 +135,8 @@ export default function ProfilePageClient({ user }) {
                 fill
                 sizes="80px"
                 className="object-cover"
+                placeholder="blur"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
               />
             ) : (
               <div className="w-full h-full bg-foreground flex items-center justify-center">

@@ -14,7 +14,6 @@ import { toast } from "sonner";
 
 export default function ProductDetailPageClient({ product }) {
   const [selectedSize, setSelectedSize] = useState(null);
-  const [showStickyBar, setShowStickyBar] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const actionButtonsRef = useRef(null);
   const { data: session, isPending } = authClient.useSession();
@@ -78,19 +77,6 @@ export default function ProductDetailPageClient({ product }) {
     };
     fetchRelated();
   }, [product?._id]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShowStickyBar(!entry.isIntersecting);
-      },
-      { threshold: 0.5 },
-    );
-    if (actionButtonsRef.current) {
-      observer.observe(actionButtonsRef.current);
-    }
-    return () => observer.disconnect();
-  }, []);
 
   // ── Null guard — after all hooks
   if (!product) {
@@ -224,22 +210,6 @@ export default function ProductDetailPageClient({ product }) {
             {/* ── Product Info */}
             <ProductInfo product={product} />
           </div>
-        </div>
-
-        {/* ── MOBILE STICKY BAR */}
-        <div
-          className={`
-          lg:hidden fixed bottom-0 left-0 right-0 z-50
-          bg-background/95 backdrop-blur-sm border-t border-border
-          px-4 py-3 flex gap-3
-          transition-transform duration-300
-          ${showStickyBar ? "translate-y-0" : "translate-y-full"}
-        `}
-        >
-          <AddToCartButton selectedSize={selectedSize} product={product} />
-          <button className="w-14 py-3 border border-foreground text-foreground flex items-center justify-center hover:bg-accent transition-colors shrink-0 rounded-full">
-            <Heart size={18} strokeWidth={1.75} />
-          </button>
         </div>
       </div>
       <div>

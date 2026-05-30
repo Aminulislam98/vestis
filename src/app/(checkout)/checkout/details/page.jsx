@@ -31,20 +31,13 @@ const deliveryOptions = [
 ];
 
 const inputCls =
-  "w-full h-11 px-4 bg-accent border-0 rounded-xl font-body text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-foreground/20 transition-all";
+  "w-full h-12 px-4 bg-background border border-border rounded-xl font-body text-base text-foreground placeholder:text-muted-foreground outline-none focus:border-foreground transition-all";
 
 export default function CheckoutDetailsClient() {
   const router = useRouter();
-  // ── Delivery method state
   const [selectedDelivery, setSelectedDelivery] = useState("standard");
-
-  // ── Cart items state
   const [items, setItems] = useState([]);
-
-  // ── Form ref — to get form data on submit
   const formRef = useRef(null);
-
-  // ── Session
   const { data: session, isPending } = authClient.useSession();
   const userId = session?.user?.id || null;
 
@@ -64,11 +57,10 @@ export default function CheckoutDetailsClient() {
       const data = await res.json();
       setItems(data.items || []);
     };
-
     fetchCart();
   }, [isPending, session?.user?.id]);
 
-  // getting logged in user data to fullfil input
+  // ── Pre-fill form if logged in
   useEffect(() => {
     if (session?.user && formRef.current) {
       formRef.current.elements["name"].value = session?.user.name;
@@ -77,34 +69,20 @@ export default function CheckoutDetailsClient() {
   }, [session]);
 
   // ── Calculate totals
-  const subtotal = items.reduce((acc, item) => item.price * item.quantity, 0);
-
-  // const deliveryCharge =
-  //   deliveryOptions.find((d) => d.id === selectedDelivery)?.price || 0;
-  // const isFreeDelivery = subtotal >= 50 && selectedDelivery === "standard";
-  // const actualDeliveryCharge = isFreeDelivery ? 0 : deliveryCharge;
-  // const total = subtotal + actualDeliveryCharge;
-
+  const subtotal = items.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0,
+  );
   const deliveryCharge =
     deliveryOptions.find((d) => d.id === selectedDelivery)?.price || 0;
-  const isFreeDelivery =
-    subtotal >= deliveryCharge && selectedDelivery === "standard";
+  const isFreeDelivery = subtotal >= 50 && selectedDelivery === "standard";
   const actualDeliveryCharge = isFreeDelivery ? 0 : deliveryCharge;
   const total = subtotal + actualDeliveryCharge;
+
   // ── Handle form submit
   const handleSubmit = async (e) => {
     const guestId = userId ? null : getGuestId();
     e.preventDefault();
-
-    // ── Get form data from e.currentTarget
-    // const form = e.currentTarget;
-    // const name = form.elements["name"].value;
-    // const email = form.elements["email"].value;
-    // const phone = form.elements["phone"].value;
-    // const address1 = form.elements["address1"].value;
-    // const address2 = form.elements["address2"].value;
-    // const city = form.elements["city"].value;
-    // const postcode = form.elements["postcode"].value;
 
     const form = e.currentTarget;
     const name = form.elements["name"].value;
@@ -115,7 +93,6 @@ export default function CheckoutDetailsClient() {
     const city = form.elements["city"].value;
     const postcode = form.elements["postcode"].value;
 
-    // ── Order data to send to server
     const orderData = {
       userId,
       guestId,
@@ -134,15 +111,13 @@ export default function CheckoutDetailsClient() {
       subtotal,
       total,
     };
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/order`, {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
+      headers: { "content-type": "application/json" },
       body: JSON.stringify(orderData),
     });
     const data = await res.json();
-    
     if (res.ok) {
       router.push(`/order-confirmation/${data.orderId}`);
     }
@@ -150,34 +125,28 @@ export default function CheckoutDetailsClient() {
 
   return (
     <div className="w-full min-h-screen bg-background flex flex-col">
-      {/* ── HEADER */}
-      <div className="px-4 sm:px-8 h-14 flex items-center justify-between max-w-7xl mx-auto w-full">
-        <p className="font-heading text-xl tracking-[0.25em] uppercase text-foreground">
-          Vestis
-        </p>
-        <p className="font-body text-sm text-muted-foreground">
-          Secure Checkout
-        </p>
-      </div>
-
       {/* ── MAIN */}
-      <div className="flex-1 flex items-start lg:items-center">
-        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          {/* ── FORM — wraps left side only */}
+      <div className="flex-1">
+        <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <form
             ref={formRef}
             onSubmit={handleSubmit}
-            className="flex flex-col lg:flex-row gap-8 items-start"
+            className="flex flex-col lg:flex-row gap-12 items-start"
           >
             {/* ── LEFT — DELIVERY DETAILS + METHOD */}
-            <div className="w-full lg:flex-1 flex flex-col gap-6">
+            <div className="w-full lg:flex-1 flex flex-col gap-8">
               {/* ── DELIVERY DETAILS */}
-              <div className="flex flex-col gap-3">
-                <h2 className="font-body font-semibold text-lg text-foreground">
-                  Delivery Details
-                </h2>
-                <div className="flex flex-col gap-2.5">
-                  {/* ── Full name */}
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <h2 className="font-body font-bold text-xl text-foreground">
+                    Delivery Details
+                  </h2>
+                  <p className="font-body text-base text-muted-foreground">
+                    Where should we send your order?
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-3">
                   <input
                     type="text"
                     name="name"
@@ -185,8 +154,6 @@ export default function CheckoutDetailsClient() {
                     required
                     className={inputCls}
                   />
-
-                  {/* ── Email */}
                   <input
                     type="email"
                     name="email"
@@ -194,8 +161,6 @@ export default function CheckoutDetailsClient() {
                     required
                     className={inputCls}
                   />
-
-                  {/* ── Phone */}
                   <input
                     type="tel"
                     name="phone"
@@ -203,8 +168,6 @@ export default function CheckoutDetailsClient() {
                     required
                     className={inputCls}
                   />
-
-                  {/* ── Address line 1 */}
                   <input
                     type="text"
                     name="address1"
@@ -212,17 +175,13 @@ export default function CheckoutDetailsClient() {
                     required
                     className={inputCls}
                   />
-
-                  {/* ── Address line 2 optional */}
                   <input
                     type="text"
                     name="address2"
                     placeholder="Address line 2 (optional)"
                     className={inputCls}
                   />
-
-                  {/* ── City + Postcode */}
-                  <div className="grid grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-2 gap-3">
                     <input
                       type="text"
                       name="city"
@@ -241,11 +200,20 @@ export default function CheckoutDetailsClient() {
                 </div>
               </div>
 
+              {/* ── DIVIDER */}
+              <div className="h-px bg-border" />
+
               {/* ── DELIVERY METHOD */}
-              <div className="flex flex-col gap-3">
-                <h2 className="font-body font-semibold text-lg text-foreground">
-                  Delivery Method
-                </h2>
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <h2 className="font-body font-bold text-xl text-foreground">
+                    Delivery Method
+                  </h2>
+                  <p className="font-body text-base text-muted-foreground">
+                    Choose how you want your order delivered.
+                  </p>
+                </div>
+
                 <div className="flex flex-col gap-2">
                   {deliveryOptions.map((option) => {
                     const Icon = option.icon;
@@ -257,32 +225,32 @@ export default function CheckoutDetailsClient() {
                         key={option.id}
                         type="button"
                         onClick={() => setSelectedDelivery(option.id)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left
+                        className={`w-full flex items-center gap-4 px-4 py-4 rounded-xl transition-all text-left border
                           ${
                             isSelected
-                              ? "bg-foreground text-background"
-                              : "bg-accent hover:bg-accent/80"
+                              ? "bg-foreground text-background border-foreground"
+                              : "bg-background border-border hover:border-foreground"
                           }`}
                       >
                         <Icon
-                          size={18}
+                          size={20}
                           strokeWidth={1.75}
                           className={`shrink-0 ${isSelected ? "text-background" : "text-foreground"}`}
                         />
                         <div className="flex flex-col flex-1">
                           <p
-                            className={`font-body font-semibold text-sm ${isSelected ? "text-background" : "text-foreground"}`}
+                            className={`font-body font-semibold text-base ${isSelected ? "text-background" : "text-foreground"}`}
                           >
                             {option.label}
                           </p>
                           <p
-                            className={`font-body text-sm ${isSelected ? "text-background/70" : "text-muted-foreground"}`}
+                            className={`font-body text-base ${isSelected ? "text-background/70" : "text-muted-foreground"}`}
                           >
                             {option.description}
                           </p>
                         </div>
                         <p
-                          className={`font-price font-semibold text-sm shrink-0 ${isSelected ? "text-background" : "text-foreground"}`}
+                          className={`font-price font-semibold text-base shrink-0 ${isSelected ? "text-background" : "text-foreground"}`}
                         >
                           {isFree
                             ? "Free"
@@ -298,15 +266,15 @@ export default function CheckoutDetailsClient() {
             </div>
 
             {/* ── RIGHT — ORDER SUMMARY */}
-            <div className="w-full lg:w-[340px] lg:sticky lg:top-8 flex flex-col gap-5 bg-[#f5f5f5] dark:bg-accent p-6 rounded-2xl">
-              <h2 className="font-body font-semibold text-lg text-foreground">
+            <div className="w-full lg:w-[360px] lg:sticky lg:top-8 flex flex-col gap-5 bg-[#f5f5f5] dark:bg-accent p-6 rounded-2xl">
+              <h2 className="font-body font-bold text-xl text-foreground">
                 Order Summary
               </h2>
 
               {/* ── Items */}
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-4">
                 {items.length === 0 && (
-                  <p className="font-body text-sm text-muted-foreground">
+                  <p className="font-body text-base text-muted-foreground">
                     Your bag is empty
                   </p>
                 )}
@@ -315,31 +283,28 @@ export default function CheckoutDetailsClient() {
                     key={`${item.productId}-${item.size}`}
                     className="flex gap-3"
                   >
-                    {/* ── Product image */}
-                    <div className="relative w-14 h-[72px] shrink-0 rounded-lg overflow-hidden bg-background">
+                    <div className="relative w-16 h-[84px] shrink-0 rounded-xl overflow-hidden bg-background">
                       <Image
                         src={item.image}
                         alt={item.name}
                         fill
-                        sizes="56px"
+                        sizes="64px"
                         className="object-cover"
                       />
                     </div>
-
-                    {/* ── Product details */}
                     <div className="flex flex-col justify-between flex-1">
                       <div>
-                        <p className="font-body font-semibold text-foreground text-sm">
+                        <p className="font-body font-semibold text-foreground text-base">
                           {item.brand}
                         </p>
-                        <p className="font-body text-foreground text-sm leading-snug">
+                        <p className="font-body text-foreground text-base leading-snug">
                           {item.name}
                         </p>
-                        <p className="font-body text-muted-foreground text-sm mt-0.5">
+                        <p className="font-body text-muted-foreground text-base mt-0.5">
                           Size: {item.size} · Qty: {item.quantity}
                         </p>
                       </div>
-                      <p className="font-price font-semibold text-foreground text-sm">
+                      <p className="font-price font-semibold text-foreground text-base">
                         £{(item.price * item.quantity).toFixed(2)}
                       </p>
                     </div>
@@ -352,14 +317,18 @@ export default function CheckoutDetailsClient() {
               {/* ── Totals */}
               <div className="flex flex-col gap-2">
                 <div className="flex justify-between items-center">
-                  <p className="font-body text-sm text-foreground">Subtotal</p>
-                  <p className="font-price text-sm text-foreground">
+                  <p className="font-body text-base text-foreground">
+                    Subtotal
+                  </p>
+                  <p className="font-price text-base text-foreground">
                     £{subtotal.toFixed(2)}
                   </p>
                 </div>
                 <div className="flex justify-between items-center">
-                  <p className="font-body text-sm text-foreground">Delivery</p>
-                  <p className="font-price text-sm text-foreground">
+                  <p className="font-body text-base text-foreground">
+                    Delivery
+                  </p>
+                  <p className="font-price text-base text-foreground">
                     {actualDeliveryCharge === 0
                       ? "Free"
                       : `£${actualDeliveryCharge.toFixed(2)}`}
@@ -370,13 +339,13 @@ export default function CheckoutDetailsClient() {
                   <p className="font-body font-semibold text-base text-foreground">
                     Total
                   </p>
-                  <p className="font-price font-bold text-lg text-foreground">
+                  <p className="font-price font-bold text-xl text-foreground">
                     £{total.toFixed(2)}
                   </p>
                 </div>
               </div>
 
-              {/* ── Place Order button — submits the form */}
+              {/* ── Place Order */}
               <button
                 type="submit"
                 className="w-full py-3.5 bg-foreground text-background font-body font-semibold text-base hover:opacity-80 transition-opacity rounded-full"
@@ -384,7 +353,7 @@ export default function CheckoutDetailsClient() {
                 Place Order
               </button>
 
-              <p className="font-body text-sm text-muted-foreground text-center leading-relaxed">
+              <p className="font-body text-base text-muted-foreground text-center leading-relaxed">
                 By placing your order you agree to our{" "}
                 <span className="underline cursor-pointer">Terms of Use</span>{" "}
                 and{" "}

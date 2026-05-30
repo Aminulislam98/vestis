@@ -19,7 +19,9 @@ const deliveryInfo = {
 
 export default async function OrderConfirmationPage({ params }) {
   const { orderId } = await params;
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/order/${orderId}`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/order/${orderId}`,
+  );
   const data = await res.json();
   const order = data?.order;
 
@@ -40,7 +42,10 @@ export default async function OrderConfirmationPage({ params }) {
     <div className="w-full min-h-screen bg-background flex flex-col">
       {/* ── HEADER */}
       <div className="px-4 sm:px-8 h-14 flex items-center max-w-7xl mx-auto w-full">
-        <p className="font-heading text-xl tracking-[0.25em] uppercase text-foreground">
+        <p
+          style={{ fontFamily: "var(--font-signature)" }}
+          className="text-2xl text-foreground"
+        >
           Vestis
         </p>
       </div>

@@ -3,6 +3,15 @@
 @import "shadcn/tailwind.css";
 @import "@heroui/styles";
 
+@keyframes loading {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
 .hide-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;

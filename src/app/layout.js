@@ -5,8 +5,15 @@ import {
   Inter_Tight,
 } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar/Navbar";
-import Footer from "@/components/layout/Footer/Footer";
+
+import { Italiana } from "next/font/google";
+
+const italiana = Italiana({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-signature",
+  display: "swap",
+});
 
 const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "600"],
@@ -63,12 +70,13 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={`
-        ${cormorant.variable}
-        ${bebas.variable}
-        ${dmSans.variable}
-        ${interTight.variable}
-        h-full antialiased
-      `}
+    ${cormorant.variable}
+    ${bebas.variable}
+    ${dmSans.variable}
+    ${interTight.variable}
+    ${italiana.variable}  ← add করুন
+    h-full antialiased
+  `}
     >
       <body className="min-h-full flex flex-col">
         <main>{children}</main>

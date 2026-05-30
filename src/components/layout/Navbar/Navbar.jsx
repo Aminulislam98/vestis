@@ -154,7 +154,8 @@ export default function Navbar() {
               </button>
               <Link
                 href="/"
-                className=" font-semibold text-2xl flex items-center justify-center "
+                className="text-3xl text-foreground"
+                style={{ fontFamily: "var(--font-signature)" }}
               >
                 Vestis
               </Link>
@@ -261,10 +262,11 @@ export default function Navbar() {
             <div className="flex items-center justify-between px-6 h-14 border-b border-border shrink-0">
               <Link
                 href="/"
-                className="font-heading text-lg tracking-[0.25em] uppercase text-foreground"
+                style={{ fontFamily: "var(--font-signature)" }}
+                className="text-2xl text-foreground"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Vestis
+                VESTIS
               </Link>
               <button
                 onClick={() => setMobileMenuOpen(false)}
