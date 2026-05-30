@@ -39,18 +39,8 @@ const ProductDetailPage = async ({ params }) => {
   let product = null;
 
   try {
-    const tokenData = await auth.api.getToken({
-      headers: await headers(),
-    });
-
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/product/${id}`,
-      {
-        headers: {
-          authorization: `Bearer ${tokenData?.token}`,
-        },
-        cache: "no-store",
-      },
     );
 
     if (res.ok) {
