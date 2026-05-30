@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { X, Megaphone } from "lucide-react";
 
 const announcements = [
-  "🎉 New users get 20% off their first order — use code NEW20",
+  "🎉 New users get 20% off their first order",
   "🎓 Student discount available — verify with Student Beans",
   "🛍️ Sale now on — up to 50% off selected styles",
   "🚚 Free UK delivery on all orders over £50",
@@ -32,7 +32,7 @@ export default function AnnouncementBanner() {
   if (!visible) return null;
 
   return (
-    <div className="w-full z-40 flex justify-between items-center px-4 py-2.5 border-b bg-foreground dark:bg-foreground">
+    <div className="w-full z-40 flex justify-between items-center py-2 border-b bg-foreground dark:bg-foreground">
       {/* Left spacer */}
       <div className="w-6" />
 

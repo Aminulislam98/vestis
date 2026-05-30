@@ -76,7 +76,7 @@ export default function HeroBanner() {
                     fontFamily: "'Barlow Condensed', sans-serif",
                     letterSpacing: "0.15em",
                   }}
-                  className="bg-white text-black font-bold text-[13px] uppercase px-10 py-4 hover:bg-black hover:text-white transition-all duration-200"
+                  className="bg-white text-black font-bold text-base uppercase px-10 py-4 hover:bg-black hover:text-white transition-all duration-200"
                 >
                   Shop Women
                 </Link>
@@ -86,7 +86,7 @@ export default function HeroBanner() {
                     fontFamily: "'Barlow Condensed', sans-serif",
                     letterSpacing: "0.15em",
                   }}
-                  className="bg-transparent border-2 border-white text-white font-bold text-[13px] uppercase px-10 py-4 hover:bg-white hover:text-black transition-all duration-200"
+                  className="bg-transparent border-2 border-white text-white font-bold text-base uppercase px-10 py-4 hover:bg-white hover:text-black transition-all duration-200"
                 >
                   Shop Men
                 </Link>
