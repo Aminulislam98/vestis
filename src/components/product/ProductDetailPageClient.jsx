@@ -17,7 +17,6 @@ export default function ProductDetailPageClient({ product }) {
   const [showStickyBar, setShowStickyBar] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const actionButtonsRef = useRef(null);
-  const isOnSale = product.isOnSale && product.salePrice;
   const { data: session, isPending } = authClient.useSession();
   const [guestId, setGuestId] = useState(null);
   const userId = session?.user?.id;
@@ -33,9 +32,10 @@ export default function ProductDetailPageClient({ product }) {
       if (guestId) {
         url = `${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist?guestId=${guestId}`;
       }
+      if (!url) return;
       const res = await fetch(url);
-      const data = await res.json(res);
-      const exists = data.items?.find((i) => i.productId === product._id);
+      const data = await res.json();
+      const exists = data.items?.find((i) => i.productId === product?._id);
       setWishListed(!!exists);
     };
     checkWishList();
@@ -51,10 +51,62 @@ export default function ProductDetailPageClient({ product }) {
     checkUserId();
   }, [userId]);
 
+  useEffect(() => {
+    if (!product) return;
+    saveViewedProduct({
+      _id: product._id,
+      name: product.name,
+      brand: product.brand,
+      price: product.price,
+      image: product.images[0].url,
+      salePrice: product.salePrice,
+      isOnSale: product.isOnSale,
+      slug: product.slug,
+      category: product.category,
+      gender: product.gender,
+    });
+  }, [product?._id]);
+
+  useEffect(() => {
+    if (!product) return;
+    const fetchRelated = async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/products/related?gender=${product.gender}&category=${product.category}&exclude=${product._id}`,
+      );
+      const data = await res.json();
+      setRelatedProducts(data.data || []);
+    };
+    fetchRelated();
+  }, [product?._id]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowStickyBar(!entry.isIntersecting);
+      },
+      { threshold: 0.5 },
+    );
+    if (actionButtonsRef.current) {
+      observer.observe(actionButtonsRef.current);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  // ── Null guard — after all hooks
+  if (!product) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-lg text-muted-foreground">Product not found</p>
+      </div>
+    );
+  }
+
+  const isOnSale = product.isOnSale && product.salePrice;
+
   const handleFavorite = async () => {
     if (isPending) return;
     setWishListed(!isWishListed);
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist/add`, {
+    await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist/add`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -76,48 +128,6 @@ export default function ProductDetailPageClient({ product }) {
       toast.success("Removed from Wishlist");
     }
   };
-
-  // ── Save to viewed history
-  useEffect(() => {
-    saveViewedProduct({
-      _id: product._id,
-      name: product.name,
-      brand: product.brand,
-      price: product.price,
-      image: product.images[0].url,
-      salePrice: product.salePrice,
-      isOnSale: product.isOnSale,
-      slug: product.slug,
-      category: product.category,
-      gender: product.gender,
-    });
-  }, [product._id]);
-
-  // ── Fetch related products
-  useEffect(() => {
-    const fetchRelated = async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/products/related?gender=${product.gender}&category=${product.category}&exclude=${product._id}`,
-      );
-      const data = await res.json();
-      setRelatedProducts(data.data || []);
-    };
-    fetchRelated();
-  }, [product._id]);
-
-  // ── Sticky bar observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShowStickyBar(!entry.isIntersecting);
-      },
-      { threshold: 0.5 },
-    );
-    if (actionButtonsRef.current) {
-      observer.observe(actionButtonsRef.current);
-    }
-    return () => observer.disconnect();
-  }, []);
 
   // ── Price block
   const PriceBlock = () => (
