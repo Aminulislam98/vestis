@@ -13,13 +13,11 @@ export default function HeroBanner() {
         <div className="hidden md:flex w-full h-[95vh]">
           <div className="relative flex-1 h-full overflow-hidden group">
             <Image
-              src="https://images.unsplash.com/photo-1635351002746-5813e205e1de?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              src="https://images.unsplash.com/photo-1635269854520-6e3ab978c85f?q=80&w=5340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Beyond the Basics — New Collection"
               fill
               className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
               priority
-              placeholder="blur"
-              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
             />
 
             {/* ── Gradient */}
@@ -109,21 +107,18 @@ export default function HeroBanner() {
         {/* ── MOBILE */}
         <div className="md:hidden relative w-full h-[92vh]">
           <Image
-            src="https://images.unsplash.com/photo-1648322032206-888c91d99616?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="https://images.unsplash.com/photo-1759725608366-ea7a6e64dbe3?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Beyond the Basics — New Collection"
             fill
-            className="object-cover object-top"
+            className="object-cover object-center"
             priority
-            placeholder="blur"
-            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
           />
 
           {/* ── Gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
           <div className="absolute bottom-0 left-0 right-0 px-6 pb-14">
-            {/* ── Label */}
-            <div className="flex items-center gap-2 mb-4">
+            {/* <div className="flex items-center gap-2 mb-4">
               <div className="w-5 h-px bg-white/40" />
               <p
                 style={{
@@ -136,7 +131,6 @@ export default function HeroBanner() {
               </p>
             </div>
 
-            {/* ── Heading */}
             <h1
               style={{
                 fontFamily: "'Barlow Condensed', sans-serif",
@@ -150,16 +144,14 @@ export default function HeroBanner() {
               <span className="text-white/80 italic">the Basics.</span>
             </h1>
 
-            {/* ── Description */}
             <p
               style={{ fontFamily: "'Barlow', sans-serif" }}
               className="text-white/60 text-base font-medium max-w-xs mb-8 leading-relaxed"
             >
               Elevate your everyday. Premium fashion for those who refuse to
               blend in.
-            </p>
+            </p> */}
 
-            {/* ── CTAs */}
             <div className="flex flex-col gap-3">
               <Link
                 href="/products?gender=womens"
@@ -167,7 +159,7 @@ export default function HeroBanner() {
                   fontFamily: "'Barlow Condensed', sans-serif",
                   letterSpacing: "0.15em",
                 }}
-                className="bg-white text-black font-bold text-base uppercase px-6 py-3.5 text-center hover:bg-black hover:text-white transition-all duration-300"
+                className="bg-white text-black font-bold text-base uppercase px-6 py-3.5 text-center hover:bg-black hover:text-white transition-all duration-300 rounded"
               >
                 Shop Women
               </Link>
@@ -177,7 +169,7 @@ export default function HeroBanner() {
                   fontFamily: "'Barlow Condensed', sans-serif",
                   letterSpacing: "0.15em",
                 }}
-                className="bg-transparent border border-white/60 text-white font-bold text-base uppercase px-6 py-3.5 text-center hover:bg-white hover:text-black transition-all duration-300"
+                className="bg-transparent border border-white/60 text-white font-bold text-base uppercase px-6 py-3.5 text-center hover:bg-white hover:text-black transition-all duration-300 rounded"
               >
                 Shop Men
               </Link>
