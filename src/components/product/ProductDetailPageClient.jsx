@@ -54,7 +54,7 @@ export default function ProductDetailPageClient({ product }) {
   const handleFavorite = async () => {
     if (isPending) return;
     setWishListed(!isWishListed);
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist/add", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist/add`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
