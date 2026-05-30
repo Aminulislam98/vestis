@@ -118,7 +118,7 @@ export default function HeroBanner() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
           <div className="absolute bottom-0 left-0 right-0 px-6 pb-14">
-            {/* <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-4">
               <div className="w-5 h-px bg-white/40" />
               <p
                 style={{
@@ -150,7 +150,7 @@ export default function HeroBanner() {
             >
               Elevate your everyday. Premium fashion for those who refuse to
               blend in.
-            </p> */}
+            </p>
 
             <div className="flex flex-col gap-3">
               <Link
