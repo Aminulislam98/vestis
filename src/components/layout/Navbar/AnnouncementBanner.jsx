@@ -4,11 +4,11 @@ import { X, Megaphone } from "lucide-react";
 
 const announcements = [
   "🎉 New users get 20% off their first order",
-  "🎓 Student discount available — verify with Student Beans",
-  "🛍️ Sale now on — up to 50% off selected styles",
+  "🎓 Student discount available",
+  "🛍️ Sale now on up to 50% off selected styles",
   "🚚 Free UK delivery on all orders over £50",
   "💳 Buy now pay later available at checkout",
-  "🔥 Limited time offer — extra 10% off sale items",
+  "🔥 Limited time offer extra 10% off sale items",
 ];
 
 export default function AnnouncementBanner() {
