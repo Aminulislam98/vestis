@@ -42,7 +42,7 @@ export default function TrackOrderPage() {
     setError("");
     setLoading(true);
 
-    const email = e.currentTarget.elements["email"].value;
+    const email = e.currentTarget.elements["email"].value.toToLowerCase();
     const orderId = e.currentTarget.elements["orderId"].value;
 
     // ── Fetch order from server
