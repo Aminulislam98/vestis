@@ -142,7 +142,7 @@ export default function CheckoutDetailsClient() {
       body: JSON.stringify(orderData),
     });
     const data = await res.json();
-    console.log("orderID:", data.orderId);
+    
     if (res.ok) {
       router.push(`/order-confirmation/${data.orderId}`);
     }

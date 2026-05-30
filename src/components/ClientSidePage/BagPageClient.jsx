@@ -117,7 +117,7 @@ export default function BagPageClient() {
 
   // ── Wishlist placeholder
   function handleWishlist(id) {
-    console.log("Add to wishlist:", id);
+    
   }
 
   // ── Calculate totals — only if items exist

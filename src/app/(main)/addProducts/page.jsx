@@ -197,7 +197,7 @@ export default function CreateProductForm() {
       if (!res.ok) throw new Error("Server error — product not saved");
 
       const data = await res.json();
-      console.log("✅ Product saved:", data);
+      
 
       toast.success("Product saved!", {
         description: `${name} has been added to the store.`,
