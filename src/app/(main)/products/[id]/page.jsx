@@ -23,7 +23,14 @@ export async function generateMetadata({ params }) {
         description:
           product.description ||
           `Shop ${product.name} by ${product.brand} at Vestis.`,
-        images: [{ url: product.images[0].url, alt: product.name }],
+        images: [
+          {
+            url: `${process.env.NEXT_PUBLIC_APP_URL}/products/${id}/opengraph`,
+            width: 1200,
+            height: 630,
+            alt: product.name,
+          },
+        ],
       },
     };
   } catch {

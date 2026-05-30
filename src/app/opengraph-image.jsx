@@ -17,33 +17,22 @@ export default function OgImage() {
         gap: 16,
       }}
     >
-      {/* ── Logo */}
       <span
         style={{
           color: "#fff",
           fontSize: 96,
-          fontFamily: "serif",
           letterSpacing: 24,
         }}
       >
         VESTIS
       </span>
 
-      {/* ── Divider */}
-      <div
-        style={{
-          width: 80,
-          height: 1,
-          background: "#444",
-        }}
-      />
+      <div style={{ width: 80, height: 1, background: "#444" }} />
 
-      {/* ── Tagline */}
       <span
         style={{
           color: "#888",
           fontSize: 24,
-          fontFamily: "sans-serif",
           letterSpacing: 6,
         }}
       >
