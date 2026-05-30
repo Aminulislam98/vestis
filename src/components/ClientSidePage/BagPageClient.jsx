@@ -297,13 +297,13 @@ export default function BagPageClient() {
                       </button>
 
                       {/* ── WISHLIST BUTTON */}
-                      <button
+                      {/* <button
                         onClick={() => handleWishlist(item.productId)}
                         className="w-9 h-9 flex items-center justify-center bg-accent rounded-xl hover:bg-border transition-colors"
                         aria-label="Add to wishlist"
                       >
                         <Heart size={14} strokeWidth={1.75} />
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>
