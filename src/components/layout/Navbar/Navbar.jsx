@@ -43,11 +43,6 @@ const navLinks = [
       { label: "Tracksuits", value: "tracksuits" },
     ],
   },
-  // {
-  //   label: "Kids",
-  //   href: "/kids",
-  //   subcategories: [],
-  // },
 ];
 
 export default function Navbar() {
@@ -116,19 +111,38 @@ export default function Navbar() {
     fetchCount();
   }, [isPending, session?.user?.id]);
 
-  // ── Merge guest cart on Google login
+  // ── FIX: আগে শুধু cart merge ছিল এবং merge হওয়ার আগেই
+  // localStorage.removeItem() হয়ে যাচ্ছিল
+  // তাই wishlist merge হচ্ছিল না
+  // এখন: cart + wishlist দুইটাই await করে merge করি
+  // তারপর guestId delete করি
   useEffect(() => {
     if (isPending) return;
     if (!session?.user?.id) return;
     const guestId = localStorage.getItem("vestis-guest-id");
     if (!guestId) return;
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/cart/merge`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ guestId, userId: session.user.id }),
-    }).then(() => {
+
+    const mergeAll = async () => {
+      // ── Step 1: Cart merge
+      await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/cart/merge`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ guestId, userId: session.user.id }),
+      });
+
+      // ── Step 2: Wishlist merge
+      await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/wishlist/merge`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ guestId, userId: session.user.id }),
+      });
+
+      // ── Step 3: সব merge হওয়ার পরে guestId delete করো
+      // আগে .then() এ immediately delete হচ্ছিল ← সমস্যা ছিল এখানে
       localStorage.removeItem("vestis-guest-id");
-    });
+    };
+
+    mergeAll();
   }, [isPending, session?.user?.id]);
 
   return (
@@ -141,7 +155,7 @@ export default function Navbar() {
           ${visible ? "translate-y-0" : "-translate-y-full"}
         `}
       >
-        <div className="max-w-[1900px] w-full mx-auto px-4  ">
+        <div className="max-w-[1900px] w-full mx-auto px-4">
           <div className="flex items-center h-14 relative">
             {/* ── LEFT — Hamburger + Logo */}
             <div className="flex items-center gap-2 flex-1">
@@ -214,7 +228,7 @@ export default function Navbar() {
                 <Search size={22} strokeWidth={2} />
               </button>
 
-              {/* ── Account — logged in → /account, not logged in → /signin */}
+              {/* ── Account */}
               <Link
                 href={"/account"}
                 className="p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
@@ -232,7 +246,7 @@ export default function Navbar() {
                 <Heart size={22} strokeWidth={2} />
               </Link>
 
-              {/* ── Bag — with count badge */}
+              {/* ── Bag */}
               <Link
                 href="/bag"
                 className="relative p-1.5 rounded-md hover:bg-accent transition-colors duration-200"
@@ -258,7 +272,6 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
           />
           <div className="absolute top-0 left-0 h-full w-full bg-background flex flex-col">
-            {/* ── Drawer header */}
             <div className="flex items-center justify-between px-6 h-14 border-b border-border shrink-0">
               <Link
                 href="/"
@@ -266,7 +279,7 @@ export default function Navbar() {
                 className="text-2xl text-foreground"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                VESTIS
+                Vestis
               </Link>
               <button
                 onClick={() => setMobileMenuOpen(false)}
@@ -277,7 +290,6 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* ── Nav links */}
             <div className="flex flex-col overflow-y-auto flex-1 px-6 mt-5">
               {navLinks.map((link) => (
                 <div key={link.label}>
@@ -331,10 +343,8 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* ── Bottom links — conditional on session */}
             <div className="px-6 pb-10 pt-6 flex flex-col gap-4 border-t border-border shrink-0">
               {session?.user ? (
-                // ── Logged in
                 <Link
                   href="/account"
                   className="font-body text-base font-semibold text-foreground"
@@ -343,7 +353,6 @@ export default function Navbar() {
                   My Account
                 </Link>
               ) : (
-                // ── Not logged in
                 <>
                   <Link
                     href="/signin"
@@ -361,8 +370,6 @@ export default function Navbar() {
                   </Link>
                 </>
               )}
-
-              {/* ── Track Order — always visible */}
               <Link
                 href="/track-order"
                 className="font-body text-base font-semibold text-foreground"
@@ -370,7 +377,6 @@ export default function Navbar() {
               >
                 Track Order
               </Link>
-
               <Link
                 href="/faqs"
                 className="font-body text-base font-semibold text-foreground"

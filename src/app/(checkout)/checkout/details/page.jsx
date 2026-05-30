@@ -42,21 +42,32 @@ export default function CheckoutDetailsClient() {
   const userId = session?.user?.id || null;
 
   // ── Fetch cart items
+  // FIX: Google login হলে Navbar merge এর জন্য 800ms wait করো
+  // আগে merge হওয়ার আগেই fetch হচ্ছিল → items empty আসছিল ❌
+  // তাই order এ empty items যাচ্ছিল → server reject করছিল ❌
   useEffect(() => {
-    const guestId = userId ? null : getGuestId();
     if (isPending) return;
 
     const fetchCart = async () => {
+      // ── userId আছে মানে Google login হয়েছে
+      // Navbar এ merge চলছে — merge শেষ হওয়ার আগেই fetch হলে empty আসবে
+      // তাই 800ms wait করো
+      if (userId) {
+        await new Promise((resolve) => setTimeout(resolve, 800));
+      }
+
       let url;
       if (userId) {
         url = `${process.env.NEXT_PUBLIC_SERVER_URL}/cart?userId=${userId}`;
       } else {
+        const guestId = getGuestId();
         url = `${process.env.NEXT_PUBLIC_SERVER_URL}/cart?guestId=${guestId}`;
       }
       const res = await fetch(url);
       const data = await res.json();
       setItems(data.items || []);
     };
+
     fetchCart();
   }, [isPending, session?.user?.id]);
 
@@ -125,7 +136,6 @@ export default function CheckoutDetailsClient() {
 
   return (
     <div className="w-full min-h-screen bg-background flex flex-col">
-      {/* ── MAIN */}
       <div className="flex-1">
         <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <form
@@ -290,6 +300,8 @@ export default function CheckoutDetailsClient() {
                         fill
                         sizes="64px"
                         className="object-cover"
+                        placeholder="blur"
+                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
                       />
                     </div>
                     <div className="flex flex-col justify-between flex-1">
