@@ -372,7 +372,7 @@ export default function Navbar() {
               </Link>
 
               <Link
-                href="#"
+                href="/faqs"
                 className="font-body text-base font-semibold text-foreground"
                 onClick={() => setMobileMenuOpen(false)}
               >
