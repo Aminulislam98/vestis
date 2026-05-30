@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 
 const ProductDetailPage = async ({ params }) => {
   const { id } = await params;
+  console.log("SERVER URL:", process.env.NEXT_PUBLIC_SERVER_URL);
 
   let product = null;
 
@@ -15,6 +16,8 @@ const ProductDetailPage = async ({ params }) => {
       Buffer.from(tokenData.token.split(".")[1], "base64").toString(),
     );
     console.log("JWT PAYLOAD:", payload);
+    console.log("ISS:", payload.iss);
+    console.log("AUD:", payload.aud);
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/product/${id}`,
