@@ -175,7 +175,7 @@ export default function ProductsPageClient({ products, gender }) {
       <div className="w-full sm:px-4 flex gap-8 min-h-screen">
         {/* ── DESKTOP SIDEBAR */}
         {filtersVisible && (
-          <aside className="hidden xl:block w-56 shrink-0">
+          <aside className="hidden md:block w-56 shrink-0">
             {/* sidebar sticky — top = navbar + topbar height */}
             <div className="sticky top-[97px] overflow-y-auto max-h-[calc(100vh-97px)] pr-1">
               <SidebarContent
