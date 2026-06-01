@@ -170,8 +170,6 @@ export default function ProductsPageClient({ products, gender }) {
         </div>
       </div>
 
-      {/* ── MAIN CONTENT — sidebar + grid side by side
-          topbar এর নিচে, flex row */}
       <div className="w-full sm:px-4 flex gap-8 min-h-screen">
         {/* ── DESKTOP SIDEBAR */}
         {filtersVisible && (
