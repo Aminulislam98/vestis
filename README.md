@@ -1,7 +1,5 @@
 <div align="center">
 
-<img src="https://vestis-psi.vercel.app/og-image.png" alt="Vestis Banner" width="100%" />
-
 <br/>
 
 # VESTIS
