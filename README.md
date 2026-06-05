@@ -1,7 +1,5 @@
 <div align="center">
 
-<br/>
-
 # VESTIS
 
 ### Premium Fashion E-Commerce Platform
@@ -15,18 +13,6 @@
 **[🌐 Live Site](https://vestis-psi.vercel.app)** &nbsp;·&nbsp; **[📂 Client Repo](https://github.com/Aminulislam98/vestis-client)** &nbsp;·&nbsp; **[⚙️ Server Repo](https://github.com/Aminulislam98/vestis-server)**
 
 </div>
-
----
-
-## 📸 Preview
-
-> _(Add 2–3 screenshots here — hero section, product page, cart/checkout. Drag and drop images into this README on GitHub.)_
-
-| Home                            | Product Page                          | Checkout                                |
-| ------------------------------- | ------------------------------------- | --------------------------------------- |
-| ![home](./screenshots/home.png) | ![product](./screenshots/product.png) | ![checkout](./screenshots/checkout.png) |
-
----
 
 ## ✨ Features
 
